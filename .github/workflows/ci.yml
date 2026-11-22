@@ -1,0 +1,100 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  core:
+    name: Core tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4
+        with:
+          dotnet-version: 8.0.x
+      - run: dotnet test tests/FLTCOM.Core.Tests --nologo
+
+  server:
+    name: Server tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4
+        with:
+          dotnet-version: 8.0.x
+      - run: dotnet test tests/FLTCOM.Server.Tests --nologo
+
+  display:
+    name: Display checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: display/package-lock.json
+      - run: npm --prefix display ci --no-audit --no-fund
+      - run: npm --prefix display run check
+      - run: npm --prefix display test
+      - run: npm --prefix display run build
+
+  tools:
+    name: Tools tests and protocol drift
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 24
+      - name: Generated protocol files match the schema
+        run: node tools/gen-protocol/gen.mjs --check
+      - run: node --test "tools/**/*.test.mjs"
+
+  plugin:
+    name: Plugin compile
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4
+        with:
+          dotnet-version: 8.0.x
+      - uses: KSPModdingLibs/KSPBuildTools/.github/actions/compile@1.1.1
+        with:
+          ksp-zip-url: https://github.com/KSPModdingLibs/KSPLibs/raw/a273edd8caf3301f3449b3a3c9ad270d7dc3ea7f/KSP-1.12.5.zip
+          solution-file-path: FLTCOM.sln
+      - name: Check the plugin landed in the package
+        run: test -f dist/GameData/FLTCOM/FLTCOM.dll
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: display/package-lock.json
+      - run: npm --prefix display ci --no-audit --no-fund
+      - run: npm --prefix display run build
+      - run: node tools/copy-fonts.mjs dist/GameData/FLTCOM
+      - name: Check the assembled package
+        run: node tools/check-package.mjs dist/GameData/FLTCOM
+
+  testmode:
+    name: Test mode and lease tests
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Install Pester 5
+        shell: powershell
+        run: Install-Module Pester -RequiredVersion 5.7.1 -Scope CurrentUser -Force -SkipPublisherCheck
+      - name: Run Pester in Windows PowerShell 5.1
+        shell: powershell
+        run: |
+          Import-Module Pester -RequiredVersion 5.7.1
+          $result = Invoke-Pester tools/tests -Output Detailed -PassThru
+          if ($result.FailedCount -gt 0 -or $result.PassedCount -eq 0) { exit 1 }

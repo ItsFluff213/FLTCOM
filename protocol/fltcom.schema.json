@@ -1,0 +1,832 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/ItsFluff213/FLTCOM/protocol/fltcom.schema.json",
+  "title": "FLTCOM wire protocol",
+  "description": "Messages between the FLTCOM plugin and the browser display, one JSON object per WebSocket text frame. Every property is always present; absence is null. Distances in meters, angles in radians, times in seconds of universal time. Bump x-protocolVersion on every change: the display and the plugin ship together, so versions must match exactly.",
+  "x-protocolVersion": 14,
+  "x-maxDepth": 64,
+  "$defs": {
+    "ServerMessage": {
+      "description": "Messages the server sends to the display.",
+      "oneOf": [
+        { "$ref": "#/$defs/ServerHello" },
+        { "$ref": "#/$defs/Fleet" },
+        { "$ref": "#/$defs/CraftLayout" },
+        { "$ref": "#/$defs/Pong" },
+        { "$ref": "#/$defs/Bye" },
+        { "$ref": "#/$defs/BriefingMessage" },
+        { "$ref": "#/$defs/Missions" },
+        { "$ref": "#/$defs/GroupRoster" }
+      ],
+      "discriminator": { "propertyName": "type" },
+      "x-messages": true
+    },
+    "ClientMessage": {
+      "description": "Messages the display sends to the server.",
+      "oneOf": [
+        { "$ref": "#/$defs/ClientHello" },
+        { "$ref": "#/$defs/Ping" },
+        { "$ref": "#/$defs/BriefRequest" },
+        { "$ref": "#/$defs/Approve" },
+        { "$ref": "#/$defs/Scrub" },
+        { "$ref": "#/$defs/Resume" },
+        { "$ref": "#/$defs/Answer" },
+        { "$ref": "#/$defs/GroupEdit" }
+      ],
+      "discriminator": { "propertyName": "type" },
+      "x-messages": true
+    },
+    "ServerHello": {
+      "description": "First message on every connection.",
+      "type": "object",
+      "properties": {
+        "protocolVersion": { "type": "integer", "format": "int32" },
+        "type": { "const": "hello" },
+        "server": { "type": "string", "description": "Server name and version, such as FLTCOM 0.1.0." },
+        "saveName": { "anyOf": [{ "type": "string" }, { "type": "null" }], "description": "The loaded save, null at the main menu." },
+        "snapshotInterval": { "type": "number", "x-unit": "s", "description": "Real time between fleet snapshots while a save is loaded. The display calls its fleet stale when several intervals pass without one." }
+      },
+      "required": ["protocolVersion", "type", "server", "saveName", "snapshotInterval"],
+      "additionalProperties": false
+    },
+    "Fleet": {
+      "description": "A complete snapshot of the game at one universal time. The display replaces its state with each one; there are no deltas.",
+      "type": "object",
+      "properties": {
+        "protocolVersion": { "type": "integer", "format": "int32" },
+        "type": { "const": "fleet" },
+        "seq": { "type": "integer", "format": "uint32", "description": "Counts up by one per snapshot for the life of the server." },
+        "ut": { "type": "number", "x-unit": "s", "description": "Universal time of the snapshot. Every orbit's mean anomaly is given at this time." },
+        "warpRate": { "type": "number", "x-unit": "1", "description": "Time warp multiplier, 1 at normal speed." },
+        "activeVesselId": { "anyOf": [{ "type": "integer", "format": "uint32" }, { "type": "null" }], "description": "The vessel the player flies, null outside flight." },
+        "bodies": { "type": "array", "items": { "$ref": "#/$defs/Body" }, "x-uniqueBy": "name" },
+        "vessels": { "type": "array", "items": { "$ref": "#/$defs/Vessel" }, "x-uniqueBy": "id" },
+        "markers": { "anyOf": [{ "$ref": "#/$defs/MarkerList" }, { "type": "null" }], "description": "The game's own surface markers on every body. Sent when they change and again every few seconds; null in between, when the display keeps the last list it got." }
+      },
+      "required": ["protocolVersion", "type", "seq", "ut", "warpRate", "activeVesselId", "bodies", "vessels", "markers"],
+      "additionalProperties": false
+    },
+    "Pong": {
+      "description": "Answer to a ping, echoing its nonce.",
+      "type": "object",
+      "properties": {
+        "protocolVersion": { "type": "integer", "format": "int32" },
+        "type": { "const": "pong" },
+        "nonce": { "type": "integer", "format": "uint32" }
+      },
+      "required": ["protocolVersion", "type", "nonce"],
+      "additionalProperties": false
+    },
+    "Bye": {
+      "description": "Sent before the server closes the connection. The display owns the words it shows for each reason.",
+      "type": "object",
+      "properties": {
+        "protocolVersion": { "type": "integer", "format": "int32" },
+        "type": { "const": "bye" },
+        "reason": { "$ref": "#/$defs/ByeReason" }
+      },
+      "required": ["protocolVersion", "type", "reason"],
+      "additionalProperties": false
+    },
+    "ClientHello": {
+      "description": "First message the display sends on every connection.",
+      "type": "object",
+      "properties": {
+        "protocolVersion": { "type": "integer", "format": "int32" },
+        "type": { "const": "hello" },
+        "client": { "type": "string", "description": "Client name, such as fltcom-display." }
+      },
+      "required": ["protocolVersion", "type", "client"],
+      "additionalProperties": false
+    },
+    "Ping": {
+      "type": "object",
+      "properties": {
+        "protocolVersion": { "type": "integer", "format": "int32" },
+        "type": { "const": "ping" },
+        "nonce": { "type": "integer", "format": "uint32" }
+      },
+      "required": ["protocolVersion", "type", "nonce"],
+      "additionalProperties": false
+    },
+    "ByeReason": {
+      "description": "shutdown: the game is closing or the save unloads. protocolMismatch: the client spoke another protocol version. The rest refuse the link because FLTCOM cannot run in that game.",
+      "type": "string",
+      "enum": ["shutdown", "protocolMismatch", "multiplayerSession", "unsupportedPhysics", "unsupportedScale"]
+    },
+    "Body": {
+      "description": "A celestial body. Its parent is orbit.referenceBody; the root star has no orbit.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Unique body name, the key other messages refer to." },
+        "orbit": { "anyOf": [{ "$ref": "#/$defs/Orbit" }, { "type": "null" }] },
+        "radius": { "type": "number", "x-unit": "m" },
+        "gravParameter": { "type": "number", "x-unit": "m3/s2" },
+        "sphereOfInfluence": { "anyOf": [{ "type": "number", "x-unit": "m" }, { "type": "null" }], "description": "Null for the root star, whose sphere is unbounded." },
+        "atmosphereHeight": { "type": "number", "x-unit": "m", "description": "0 when the body has no atmosphere." },
+        "rotationPeriod": { "type": "number", "x-unit": "s" },
+        "rotationAngle": { "type": "number", "x-unit": "rad", "description": "How far the body has turned at the snapshot's ut: the angle from the reference direction to longitude 0, in [0, 2π)." },
+        "highestTerrainAltitude": { "type": "number", "x-unit": "m", "description": "Highest terrain above sea level, 0 for a body without solid terrain." },
+        "color": { "type": "string", "description": "Orbit color as #rrggbb." },
+        "texture": { "anyOf": [{ "type": "string" }, { "type": "null" }], "description": "Server path of an equirectangular PNG of the body's surface captured from the running game, such as /art/body/Kerbin.png. Null until captured or when the capture failed; the display then draws a grey sphere." }
+      },
+      "required": ["name", "orbit", "radius", "gravParameter", "sphereOfInfluence", "atmosphereHeight", "rotationPeriod", "rotationAngle", "highestTerrainAltitude", "color", "texture"],
+      "additionalProperties": false
+    },
+    "Orbit": {
+      "description": "Keplerian elements at the snapshot's universal time. Apoapsis, periapsis and period derive from these and the reference body.",
+      "type": "object",
+      "properties": {
+        "referenceBody": { "type": "string", "description": "Name of the body this orbit is around." },
+        "semiMajorAxis": { "type": "number", "x-unit": "m", "description": "Negative on a hyperbolic orbit." },
+        "eccentricity": { "type": "number", "x-unit": "1" },
+        "inclination": { "type": "number", "x-unit": "rad" },
+        "longitudeOfAscendingNode": { "type": "number", "x-unit": "rad" },
+        "argumentOfPeriapsis": { "type": "number", "x-unit": "rad" },
+        "meanAnomaly": { "type": "number", "x-unit": "rad" }
+      },
+      "required": ["referenceBody", "semiMajorAxis", "eccentricity", "inclination", "longitudeOfAscendingNode", "argumentOfPeriapsis", "meanAnomaly"],
+      "additionalProperties": false
+    },
+    "Vessel": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer", "format": "uint32", "description": "KSP persistentId, unique within a fleet snapshot." },
+        "registryCode": { "type": "string", "description": "Fleet registry code, such as FLT-0042-PRB." },
+        "name": { "type": "string" },
+        "vesselType": { "$ref": "#/$defs/VesselType" },
+        "location": { "$ref": "#/$defs/Location" },
+        "loaded": { "type": "boolean", "description": "KSP Vessel.loaded: its parts are in the scene. A loaded vessel can still be on rails." },
+        "controllable": { "type": "boolean", "description": "KSP Vessel.IsControllable: it accepts control input now." },
+        "comms": { "$ref": "#/$defs/CommsState" },
+        "signalStrength": { "anyOf": [{ "type": "number", "x-unit": "1" }, { "type": "null" }], "description": "0 to 1 while comms is link, otherwise null." },
+        "crewCapacity": { "type": "integer", "format": "int32" },
+        "crew": { "type": "array", "items": { "$ref": "#/$defs/CrewMember" } },
+        "resources": { "type": "array", "items": { "$ref": "#/$defs/Resource" }, "description": "Vessel totals per resource." },
+        "mass": { "type": "number", "x-unit": "kg" },
+        "deltaV": { "anyOf": [{ "$ref": "#/$defs/DeltaV" }, { "type": "null" }], "description": "Null when the vessel has no engines or no estimate exists." },
+        "attitude": { "anyOf": [{ "$ref": "#/$defs/Quat" }, { "type": "null" }], "description": "Rotation from the craft frame to the orbit frame. Craft frame: CraftPart coordinates with y and z swapped (x right, y forward, z up the craft's axis). Orbit frame: the frame of the orbital elements, z toward the north pole, x where a body with rotationAngle 0 has longitude 0. Null when unknown." },
+        "docking": { "anyOf": [{ "$ref": "#/$defs/Docking" }, { "type": "null" }], "description": "The vessel's docking ports. Null when it has none or they are unknown." },
+        "spaceObject": { "anyOf": [{ "$ref": "#/$defs/SpaceObject" }, { "type": "null" }], "description": "What kind of rock an asteroid or comet is. Null for every vessel that is not a spaceObject." }
+      },
+      "required": ["id", "registryCode", "name", "vesselType", "location", "loaded", "controllable", "comms", "signalStrength", "crewCapacity", "crew", "resources", "mass", "deltaV", "attitude", "docking", "spaceObject"],
+      "additionalProperties": false
+    },
+    "SpaceObject": {
+      "type": "object",
+      "properties": {
+        "kind": { "$ref": "#/$defs/SpaceObjectKind" },
+        "sizeClass": { "anyOf": [{ "$ref": "#/$defs/SizeClass" }, { "type": "null" }], "description": "Null when the save does not say." }
+      },
+      "required": ["kind", "sizeClass"],
+      "additionalProperties": false
+    },
+    "SpaceObjectKind": {
+      "description": "comet: the rock carries KSP's ModuleComet. asteroid: any other space object.",
+      "type": "string",
+      "enum": ["asteroid", "comet"]
+    },
+    "SizeClass": {
+      "description": "KSP's size class of an asteroid or comet (DiscoveryInfo.objectSize), lower case on the wire, a the smallest. Asteroids come as a to e; comets draw from the same letters on their own range.",
+      "type": "string",
+      "enum": ["a", "b", "c", "d", "e", "f", "g", "h", "i"]
+    },
+    "VesselType": {
+      "description": "The stock KSP vessel types.",
+      "type": "string",
+      "enum": ["debris", "spaceObject", "unknown", "probe", "relay", "rover", "lander", "ship", "plane", "station", "base", "eva", "flag", "deployedScienceController", "deployedSciencePart", "droppedPart", "deployedGroundPart"]
+    },
+    "Location": {
+      "description": "Where a vessel is: on an orbit, or resting on a surface.",
+      "oneOf": [
+        { "$ref": "#/$defs/OrbitalLocation" },
+        { "$ref": "#/$defs/SurfaceLocation" }
+      ],
+      "discriminator": { "propertyName": "kind" }
+    },
+    "OrbitalLocation": {
+      "type": "object",
+      "properties": {
+        "kind": { "const": "orbit" },
+        "situation": { "$ref": "#/$defs/OrbitalSituation" },
+        "orbit": { "$ref": "#/$defs/Orbit" }
+      },
+      "required": ["kind", "situation", "orbit"],
+      "additionalProperties": false
+    },
+    "SurfaceLocation": {
+      "type": "object",
+      "properties": {
+        "kind": { "const": "surface" },
+        "situation": { "$ref": "#/$defs/SurfaceSituation" },
+        "body": { "type": "string", "description": "Name of the body the vessel rests on." },
+        "latitude": { "type": "number", "x-unit": "rad" },
+        "longitude": { "type": "number", "x-unit": "rad" },
+        "altitude": { "type": "number", "x-unit": "m", "description": "Above sea level." }
+      },
+      "required": ["kind", "situation", "body", "latitude", "longitude", "altitude"],
+      "additionalProperties": false
+    },
+    "OrbitalSituation": {
+      "type": "string",
+      "enum": ["flying", "subOrbital", "orbiting", "escaping"]
+    },
+    "SurfaceSituation": {
+      "type": "string",
+      "enum": ["prelaunch", "landed", "splashed"]
+    },
+    "CommsState": {
+      "description": "link: connected to the network. los: CommNet is on and the vessel has no path home. none: the vessel cannot communicate (debris, flags). off: CommNet is disabled in this save.",
+      "type": "string",
+      "enum": ["link", "los", "none", "off"]
+    },
+    "Docking": {
+      "type": "object",
+      "properties": {
+        "ports": { "type": "array", "items": { "$ref": "#/$defs/DockingPortInfo" } }
+      },
+      "required": ["ports"],
+      "additionalProperties": false
+    },
+    "DockingPortInfo": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer", "format": "uint32", "description": "The port part's persistentId." },
+        "name": { "type": "string", "description": "The part's title, such as Clamp-O-Tron Docking Port." },
+        "size": { "type": "string", "description": "The stock node type, such as size1. Only equal sizes dock." },
+        "free": { "type": "boolean", "description": "Ready to dock: not docked, not disabled, not behind a closed shield." }
+      },
+      "required": ["id", "name", "size", "free"],
+      "additionalProperties": false
+    },
+    "CrewMember": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "trait": { "type": "string", "description": "Pilot, Engineer, Scientist, Tourist, or a trait a mod adds." },
+        "level": { "type": "integer", "format": "int32" }
+      },
+      "required": ["name", "trait", "level"],
+      "additionalProperties": false
+    },
+    "Resource": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "amount": { "type": "number", "x-unit": "u" },
+        "capacity": { "type": "number", "x-unit": "u" }
+      },
+      "required": ["name", "amount", "capacity"],
+      "additionalProperties": false
+    },
+    "DeltaV": {
+      "type": "object",
+      "properties": {
+        "total": { "type": "number", "x-unit": "m/s", "description": "Vacuum delta-v of all stages." },
+        "source": { "$ref": "#/$defs/DeltaVSource" },
+        "stages": { "type": "array", "items": { "$ref": "#/$defs/StageDeltaV" }, "description": "Per-stage figures, highest stage index first (the stage that fires first). Empty when no per-stage estimate exists." }
+      },
+      "required": ["total", "source", "stages"],
+      "additionalProperties": false
+    },
+    "StageDeltaV": {
+      "type": "object",
+      "properties": {
+        "stage": { "type": "integer", "format": "int32", "description": "KSP stage index, matching CraftPart.stage." },
+        "deltaV": { "type": "number", "x-unit": "m/s", "description": "Vacuum delta-v of this stage." },
+        "twr": { "anyOf": [{ "type": "number", "x-unit": "1" }, { "type": "null" }], "description": "Thrust to weight at ignition against the body the vessel is at, null when the stage has no engine." },
+        "burnTime": { "anyOf": [{ "type": "number", "x-unit": "s" }, { "type": "null" }], "description": "Full-throttle burn time, null when the stage has no engine." }
+      },
+      "required": ["stage", "deltaV", "twr", "burnTime"],
+      "additionalProperties": false
+    },
+    "CraftLayout": {
+      "description": "A vessel's part layout. The server sends it when it first links a vessel and whenever the parts change (staging, docking, decoupling), not with every fleet snapshot, and resends every layout after a new connection's hello. A newer revision for the same vesselId replaces the older one.",
+      "type": "object",
+      "properties": {
+        "protocolVersion": { "type": "integer", "format": "int32" },
+        "type": { "const": "layout" },
+        "vesselId": { "type": "integer", "format": "uint32" },
+        "revision": { "type": "integer", "format": "uint32", "description": "Counts up by one each time this vessel's layout changes." },
+        "parts": { "type": "array", "items": { "$ref": "#/$defs/CraftPart" } },
+        "model": { "anyOf": [{ "type": "string" }, { "type": "null" }], "description": "Server path of the simplified 3D model of this design, such as /art/craft/1a2b3c4d.json: a CraftModel document. Vessels built alike share one model. Null until exported." }
+      },
+      "required": ["protocolVersion", "type", "vesselId", "revision", "parts", "model"],
+      "additionalProperties": false
+    },
+    "CraftPart": {
+      "description": "One part, in the root part's frame: x right, y up the craft's axis, z forward. Positions are part origins.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer", "format": "uint32", "description": "KSP persistentId of the part." },
+        "name": { "type": "string", "description": "Part name, such as liquidEngine." },
+        "position": { "$ref": "#/$defs/Vec3" },
+        "rotation": { "$ref": "#/$defs/Quat" },
+        "size": { "$ref": "#/$defs/Vec3", "description": "Full extents of the part's bounds along its own axes." },
+        "category": { "$ref": "#/$defs/PartCategory" },
+        "stage": { "type": "integer", "format": "int32", "description": "KSP stage index (the part's inverseStage), -1 for a part that is never staged." }
+      },
+      "required": ["id", "name", "position", "rotation", "size", "category", "stage"],
+      "additionalProperties": false
+    },
+    "PartCategory": {
+      "type": "string",
+      "enum": ["engine", "tank", "pod", "decoupler", "other"]
+    },
+    "Vec3": {
+      "type": "object",
+      "properties": {
+        "x": { "type": "number", "x-unit": "m" },
+        "y": { "type": "number", "x-unit": "m" },
+        "z": { "type": "number", "x-unit": "m" }
+      },
+      "required": ["x", "y", "z"],
+      "additionalProperties": false
+    },
+    "Quat": {
+      "type": "object",
+      "properties": {
+        "x": { "type": "number", "x-unit": "1" },
+        "y": { "type": "number", "x-unit": "1" },
+        "z": { "type": "number", "x-unit": "1" },
+        "w": { "type": "number", "x-unit": "1" }
+      },
+      "required": ["x", "y", "z", "w"],
+      "additionalProperties": false
+    },
+    "DeltaVSource": {
+      "description": "stock: KSP's own calculation for a loaded vessel. estimate: FLTCOM's estimate from the saved parts of an unloaded vessel.",
+      "type": "string",
+      "enum": ["stock", "estimate"]
+    },
+    "BriefRequest": {
+      "description": "Ask the server to plan an orbit change for one vessel or one group and answer with a briefing.",
+      "type": "object",
+      "properties": {
+        "protocolVersion": { "type": "integer", "format": "int32" },
+        "type": { "const": "brief" },
+        "requestId": { "type": "integer", "format": "uint32", "description": "Chosen by the display; the briefing echoes it." },
+        "vesselId": { "type": "integer", "format": "uint32", "description": "Vessel.id of the vessel to fly; ignored when groupId is set." },
+        "groupId": { "anyOf": [{ "type": "string" }, { "type": "null" }], "description": "Plan for every member of this group in one operation; null plans for vesselId alone." },
+        "change": { "$ref": "#/$defs/OrbitChangeRequest" },
+        "codename": { "anyOf": [{ "type": "string" }, { "type": "null" }], "description": "Operator's codename; null lets the server generate one." },
+        "pinnedStage": { "anyOf": [{ "type": "integer", "format": "int32" }, { "type": "null" }], "description": "Stage that flies every burn; null picks automatically, lowest stage first." }
+      },
+      "required": ["protocolVersion", "type", "requestId", "vesselId", "groupId", "change", "codename", "pinnedStage"],
+      "additionalProperties": false
+    },
+    "Approve": {
+      "description": "Approve a briefed operation. The server uploads it and flies it when its burns come due.",
+      "type": "object",
+      "properties": {
+        "protocolVersion": { "type": "integer", "format": "int32" },
+        "type": { "const": "approve" },
+        "operationId": { "type": "string" },
+        "codename": { "type": "string", "description": "Final codename, possibly edited after the briefing." }
+      },
+      "required": ["protocolVersion", "type", "operationId", "codename"],
+      "additionalProperties": false
+    },
+    "Scrub": {
+      "description": "Cancel an operation. Before ignition it scrubs; during a burn it aborts and releases control.",
+      "type": "object",
+      "properties": {
+        "protocolVersion": { "type": "integer", "format": "int32" },
+        "type": { "const": "scrub" },
+        "operationId": { "type": "string" }
+      },
+      "required": ["protocolVersion", "type", "operationId"],
+      "additionalProperties": false
+    },
+    "Resume": {
+      "description": "Resume an operation in Hold.",
+      "type": "object",
+      "properties": {
+        "protocolVersion": { "type": "integer", "format": "int32" },
+        "type": { "const": "resume" },
+        "operationId": { "type": "string" }
+      },
+      "required": ["protocolVersion", "type", "operationId"],
+      "additionalProperties": false
+    },
+    "Answer": {
+      "description": "The operator's answer to an open prompt.",
+      "type": "object",
+      "properties": {
+        "protocolVersion": { "type": "integer", "format": "int32" },
+        "type": { "const": "answer" },
+        "promptId": { "type": "integer", "format": "uint32" },
+        "accept": { "type": "boolean" }
+      },
+      "required": ["protocolVersion", "type", "promptId", "accept"],
+      "additionalProperties": false
+    },
+    "BriefingMessage": {
+      "description": "Answer to a brief request: the planned burns, the delta-v budget and the contingencies.",
+      "type": "object",
+      "properties": {
+        "protocolVersion": { "type": "integer", "format": "int32" },
+        "type": { "const": "briefing" },
+        "requestId": { "type": "integer", "format": "uint32" },
+        "operationId": { "anyOf": [{ "type": "string" }, { "type": "null" }], "description": "Null when planning failed." },
+        "codename": { "type": "string" },
+        "vesselId": { "type": "integer", "format": "uint32" },
+        "groupId": { "anyOf": [{ "type": "string" }, { "type": "null" }], "description": "The group the briefing covers, null for one vessel." },
+        "change": { "$ref": "#/$defs/OrbitChangeRequest" },
+        "description": { "type": "string", "description": "Readable summary of the change, such as circularize at apoapsis." },
+        "burns": { "type": "array", "items": { "$ref": "#/$defs/BurnPlan" } },
+        "requiredDeltaV": { "type": "number", "x-unit": "m/s" },
+        "availableDeltaV": { "type": "number", "x-unit": "m/s" },
+        "margin": { "anyOf": [{ "type": "number", "x-unit": "1" }, { "type": "null" }], "description": "Spare delta-v as a share of required; null when nothing is required." },
+        "stages": { "type": "array", "items": { "$ref": "#/$defs/StageLine" } },
+        "contingencies": { "type": "array", "items": { "$ref": "#/$defs/ContingencyNote" } },
+        "canApprove": { "type": "boolean", "description": "False while any contingency is red." },
+        "error": { "anyOf": [{ "type": "string" }, { "type": "null" }], "description": "Why no plan exists, null on success." },
+        "porkchop": { "anyOf": [{ "$ref": "#/$defs/PorkchopPlot" }, { "type": "null" }], "description": "The transfer windows searched for a transfer between planets, null otherwise." },
+        "stagePlan": { "type": "array", "items": { "$ref": "#/$defs/StagePlanLine" }, "description": "What each stage of each vessel does and when it fires in this operation, next stage first." },
+        "autoActions": { "type": "array", "items": { "$ref": "#/$defs/AutoAction" }, "description": "Every automatic action the operation will take: staging, landing gear, fairings, panels." },
+        "deployment": { "anyOf": [{ "$ref": "#/$defs/Deployment" }, { "type": "null" }], "description": "The payloads, releases and carrier return of a constellation deployment, null otherwise." }
+      },
+      "required": ["protocolVersion", "type", "requestId", "operationId", "codename", "vesselId", "groupId", "change", "description", "burns", "requiredDeltaV", "availableDeltaV", "margin", "stages", "contingencies", "canApprove", "error", "porkchop", "stagePlan", "autoActions", "deployment"],
+      "additionalProperties": false
+    },
+    "PorkchopPlot": {
+      "description": "Total delta-v of a transfer between planets over a grid of departure times and flight times, and the best window found.",
+      "type": "object",
+      "properties": {
+        "departureStart": { "type": "number", "x-unit": "s", "description": "Departure time of the first column." },
+        "departureStep": { "type": "number", "x-unit": "s" },
+        "flightStart": { "type": "number", "x-unit": "s", "description": "Flight time of the first row." },
+        "flightStep": { "type": "number", "x-unit": "s" },
+        "columns": { "type": "integer", "format": "int32" },
+        "rows": { "type": "integer", "format": "int32" },
+        "deltaV": { "type": "array", "items": { "type": "number", "x-unit": "m/s" }, "description": "Row by row, rows of flight time and columns of departure time; 0 where no transfer exists." },
+        "bestDeparture": { "type": "number", "x-unit": "s" },
+        "bestFlight": { "type": "number", "x-unit": "s" },
+        "bestDeltaV": { "type": "number", "x-unit": "m/s" }
+      },
+      "required": ["departureStart", "departureStep", "flightStart", "flightStep", "columns", "rows", "deltaV", "bestDeparture", "bestFlight", "bestDeltaV"],
+      "additionalProperties": false
+    },
+    "Missions": {
+      "description": "Every operation the server knows and every open prompt. Sent on connect and on each change; the display replaces its state with each one.",
+      "type": "object",
+      "properties": {
+        "protocolVersion": { "type": "integer", "format": "int32" },
+        "type": { "const": "missions" },
+        "ut": { "type": "number", "x-unit": "s" },
+        "operations": { "type": "array", "items": { "$ref": "#/$defs/OperationStatus" }, "x-uniqueBy": "id" },
+        "prompts": { "type": "array", "items": { "$ref": "#/$defs/Prompt" }, "x-uniqueBy": "id" }
+      },
+      "required": ["protocolVersion", "type", "ut", "operations", "prompts"],
+      "additionalProperties": false
+    },
+    "OrbitChangeRequest": {
+      "description": "What the orbit should become.",
+      "type": "object",
+      "properties": {
+        "kind": { "$ref": "#/$defs/ChangeKind" },
+        "altitude": { "anyOf": [{ "type": "number", "x-unit": "m" }, { "type": "null" }], "description": "Target altitude above sea level for changeApoapsis, changePeriapsis, circularOrbit and spreadEvenly; the rise for raiseApoapsis; the apoapsis for launch, where null means the standard low orbit; otherwise null." },
+        "periapsis": { "anyOf": [{ "type": "number", "x-unit": "m" }, { "type": "null" }], "description": "Target periapsis above sea level for launch, null for a circular orbit at altitude; otherwise null." },
+        "inclination": { "anyOf": [{ "type": "number", "x-unit": "rad" }, { "type": "null" }], "description": "Target inclination for changeInclination and launch, where null flies due east; for deployConstellation, the ring's inclination from 0 to 180 degrees, where null or 0 is the equatorial ring; otherwise null." },
+        "lan": { "anyOf": [{ "type": "number", "x-unit": "rad" }, { "type": "null" }], "description": "Longitude of the ascending node for launch: the launch then waits for the site to pass under that plane. For deployConstellation, the ring's ascending node, null meaning 0. Needs an inclination. Otherwise null." },
+        "body": { "anyOf": [{ "type": "string" }, { "type": "null" }], "description": "The body a transfer flies to, by name; the orbit there is circular at altitude, inclined by inclination when that is set. Otherwise null." },
+        "targetVesselId": { "anyOf": [{ "type": "integer", "format": "uint32" }, { "type": "null" }], "description": "The vessel a rendezvous meets, by persistentId; otherwise null." },
+        "targetPortId": { "anyOf": [{ "type": "integer", "format": "uint32" }, { "type": "null" }], "description": "The docking port on the target that a rendezvous reserves, by part persistentId; null reserves the whole target vessel. Otherwise null." },
+        "landing": { "anyOf": [{ "$ref": "#/$defs/LandingTarget" }, { "type": "null" }], "description": "Where land touches down; null for every other kind." },
+        "autoSystems": { "anyOf": [{ "type": "boolean" }, { "type": "null" }], "description": "true or null: FLTCOM stages in every burn and works landing gear, fairings, solar panels, antennas and radiators. false: it stages only where it did before (ascent, landing, a flamed-out node burn) and touches nothing else." },
+        "endOfLife": { "anyOf": [{ "$ref": "#/$defs/EndOfLife" }, { "type": "null" }], "description": "What a deployConstellation's transfer stage does once its satellites are out; null picks burnUp where the body has air and the delta-v suffices, otherwise park. Null for every other kind." }
+      },
+      "required": ["kind", "altitude", "periapsis", "inclination", "lan", "body", "targetVesselId", "targetPortId", "landing", "autoSystems", "endOfLife"],
+      "additionalProperties": false
+    },
+    "ChangeKind": {
+      "type": "string",
+      "description": "raiseApoapsis: raise every apoapsis by altitude metres. spreadEvenly: one circular orbit at altitude with the vessels equally spaced around it. launch: fly a vessel on the launch pad to orbit. transfer: fly one vessel to a circular orbit at altitude around body, at inclination there when set. rendezvous: close on targetVesselId and hold within 50 m. dock: rendezvous, then dock with RCS to targetPortId, or the best free port when it is null. land: deorbit and touch down at landing. deployConstellation: release every payload of the carrier onto one circle at altitude around the body it orbits, in the plane set by inclination and lan (equatorial when inclination is null), evenly spaced, then bring the carrier home.",
+      "enum": ["circularize", "changeApoapsis", "changePeriapsis", "changeInclination", "circularOrbit", "standardLowOrbit", "raiseApoapsis", "spreadEvenly", "launch", "transfer", "rendezvous", "dock", "land", "deployConstellation"]
+    },
+    "LandingTarget": {
+      "description": "Where a landing touches down. launchPad and runway are the KSC spots on the home planet, and their coordinates are fixed by the server; custom uses latitude and longitude on the vessel's body.",
+      "type": "object",
+      "properties": {
+        "site": { "$ref": "#/$defs/LandingSite" },
+        "latitude": { "type": "number", "x-unit": "rad" },
+        "longitude": { "type": "number", "x-unit": "rad", "description": "East-positive." }
+      },
+      "required": ["site", "latitude", "longitude"],
+      "additionalProperties": false
+    },
+    "MarkerList": {
+      "type": "object",
+      "properties": {
+        "items": { "type": "array", "items": { "$ref": "#/$defs/SurfaceMarker" }, "x-uniqueBy": "id" }
+      },
+      "required": ["items"],
+      "additionalProperties": false
+    },
+    "SurfaceMarker": {
+      "description": "A spot the game marks on a body's surface, offered as a landing target.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Stable key, such as site:launchPad, flag:1234 or waypoint:<guid>." },
+        "name": { "type": "string" },
+        "kind": { "$ref": "#/$defs/SurfaceMarkerKind" },
+        "body": { "type": "string", "description": "Name of the body the marker is on." },
+        "latitude": { "type": "number", "x-unit": "rad" },
+        "longitude": { "type": "number", "x-unit": "rad", "description": "East-positive, in (-π, π]." }
+      },
+      "required": ["id", "name", "kind", "body", "latitude", "longitude"],
+      "additionalProperties": false
+    },
+    "SurfaceMarkerKind": {
+      "type": "string",
+      "description": "waypoint: a custom waypoint the player placed. contract: a contract's waypoint. flag: a planted flag. vessel: a landed or splashed vessel. site: the launch pad or the runway on the home planet, with id site:launchPad or site:runway.",
+      "enum": ["waypoint", "contract", "flag", "vessel", "site"]
+    },
+    "LandingSite": {
+      "type": "string",
+      "enum": ["launchPad", "runway", "custom"]
+    },
+    "LandingPrediction": {
+      "description": "Where and when the descent is predicted to touch down.",
+      "type": "object",
+      "properties": {
+        "latitude": { "type": "number", "x-unit": "rad" },
+        "longitude": { "type": "number", "x-unit": "rad", "description": "East-positive." },
+        "ut": { "type": "number", "x-unit": "s" }
+      },
+      "required": ["latitude", "longitude", "ut"],
+      "additionalProperties": false
+    },
+    "BurnPlan": {
+      "description": "One planned burn. Delta-v components are in m/s along prograde, orbit normal and radial-out at the node.",
+      "type": "object",
+      "properties": {
+        "vesselId": { "type": "integer", "format": "uint32" },
+        "label": { "type": "string" },
+        "nodeUt": { "type": "number", "x-unit": "s", "description": "Universal time of the impulsive node." },
+        "startUt": { "type": "number", "x-unit": "s", "description": "Ignition, so the burn is centred on the node in delta-v terms." },
+        "duration": { "type": "number", "x-unit": "s", "description": "Burn time from the vessel's thrust and mass." },
+        "prograde": { "type": "number", "x-unit": "m/s" },
+        "normal": { "type": "number", "x-unit": "m/s" },
+        "radial": { "type": "number", "x-unit": "m/s" },
+        "deltaV": { "type": "number", "x-unit": "m/s" },
+        "orbitAfter": { "anyOf": [{ "$ref": "#/$defs/Orbit" }, { "type": "null" }], "description": "The planned orbit after this burn, with meanAnomaly at nodeUt, for drawing the plan. Set on every burn whose result the planner knows: each orbit change and transfer burn, a landing's deorbit, the orbit a launch aims for. Null on an ascent, a descent, and the earlier burns of an operation reloaded from a save." }
+      },
+      "required": ["vesselId", "label", "nodeUt", "startUt", "duration", "prograde", "normal", "radial", "deltaV", "orbitAfter"],
+      "additionalProperties": false
+    },
+    "StageLine": {
+      "type": "object",
+      "properties": {
+        "vesselId": { "type": "integer", "format": "uint32" },
+        "stage": { "type": "integer", "format": "int32" },
+        "deltaV": { "type": "number", "x-unit": "m/s" },
+        "assigned": { "type": "number", "x-unit": "m/s", "description": "Delta-v of the planned burns this stage flies." },
+        "twr": { "type": "number", "x-unit": "1", "description": "Vacuum thrust-to-weight at the body's surface gravity." },
+        "burnTime": { "type": "number", "x-unit": "s" },
+        "insufficient": { "type": "boolean", "description": "The stage cannot cover its assigned burns." }
+      },
+      "required": ["vesselId", "stage", "deltaV", "assigned", "twr", "burnTime", "insufficient"],
+      "additionalProperties": false
+    },
+    "StagePlanLine": {
+      "type": "object",
+      "properties": {
+        "vesselId": { "type": "integer", "format": "uint32" },
+        "stage": { "type": "integer", "format": "int32", "description": "KSP stage index, matching CraftPart.stage." },
+        "does": { "type": "string", "description": "What firing the stage does, such as drop 2 boosters, light 1 engine." },
+        "when": { "type": "string", "description": "When it fires in this operation, such as at 1:12, kept, kept for landing." },
+        "fires": { "type": "boolean", "description": "The operation fires this stage to reach its burns." },
+        "severity": { "anyOf": [{ "$ref": "#/$defs/Alert" }, { "type": "null" }], "description": "red: the stager will hold at this unsafe stage; amber: unsafe but never reached; null when safe." },
+        "warning": { "anyOf": [{ "type": "string" }, { "type": "null" }], "description": "Why the stage is unsafe, such as opens parachutes in vacuum; null when safe." }
+      },
+      "required": ["vesselId", "stage", "does", "when", "fires", "severity", "warning"],
+      "additionalProperties": false
+    },
+    "Deployment": {
+      "description": "A constellation deployment: the carrier's working orbit, each payload, each release and the carrier's return.",
+      "type": "object",
+      "properties": {
+        "altitude": { "type": "number", "x-unit": "m", "description": "The circle the payloads end on; the requested altitude when it was refused." },
+        "synchronousAltitude": { "anyOf": [{ "type": "number", "x-unit": "m" }, { "type": "null" }], "description": "Where an orbit lasts one day of the body, null when its day is unknown." },
+        "suggestedAltitude": { "anyOf": [{ "type": "number", "x-unit": "m" }, { "type": "null" }], "description": "When the altitude is refused: the highest one that works." },
+        "method": { "$ref": "#/$defs/DeployMethod" },
+        "workingOrbit": { "anyOf": [{ "$ref": "#/$defs/Orbit" }, { "type": "null" }], "description": "The carrier's orbit while it releases, meanAnomaly at the first release; null when refused." },
+        "payloads": { "type": "array", "items": { "$ref": "#/$defs/DeployPayload" } },
+        "releases": { "type": "array", "items": { "$ref": "#/$defs/DeployRelease" }, "description": "In release order." },
+        "returnPlan": { "$ref": "#/$defs/CarrierReturnPlan" },
+        "launchStage": { "$ref": "#/$defs/LaunchStagePlan" }
+      },
+      "required": ["altitude", "synchronousAltitude", "suggestedAltitude", "method", "workingOrbit", "payloads", "releases", "returnPlan", "launchStage"],
+      "additionalProperties": false
+    },
+    "DeployMethod": {
+      "type": "string",
+      "description": "resonant: the carrier flies an orbit whose period is (n-1)/n or (n+1)/n of the circle's and each payload circularizes itself. carrierPhasing: payloads without engines; the carrier circularizes and phases between releases.",
+      "enum": ["resonant", "carrierPhasing"]
+    },
+    "DeployPayload": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer", "format": "uint32", "description": "The payload's command part: its burns use this id until it is released and becomes a vessel." },
+        "name": { "type": "string", "description": "The name it gets once released, such as Relay Carrier Sat 1." },
+        "mass": { "type": "number", "x-unit": "kg" },
+        "deltaV": { "type": "number", "x-unit": "m/s", "description": "Vacuum delta-v of its own engines and propellant." },
+        "circularizeDeltaV": { "type": "number", "x-unit": "m/s", "description": "What its own circularization needs; 0 when the carrier places it." }
+      },
+      "required": ["id", "name", "mass", "deltaV", "circularizeDeltaV"],
+      "additionalProperties": false
+    },
+    "DeployRelease": {
+      "type": "object",
+      "properties": {
+        "payloadId": { "type": "integer", "format": "uint32" },
+        "name": { "type": "string" },
+        "pass": { "type": "integer", "format": "int32", "description": "Which pass of the working orbit, from 1." },
+        "ut": { "type": "number", "x-unit": "s", "description": "When the carrier lets go." },
+        "nodeUt": { "type": "number", "x-unit": "s", "description": "Where the payload reaches the circle: its circularization node, or the release on the circle." },
+        "apsis": { "type": "string", "description": "apoapsis, periapsis, or circle." },
+        "spacingError": { "type": "number", "x-unit": "rad", "description": "Signed angle from its even slot once every payload is out." },
+        "finalOrbit": { "$ref": "#/$defs/Orbit" }
+      },
+      "required": ["payloadId", "name", "pass", "ut", "nodeUt", "apsis", "spacingError", "finalOrbit"],
+      "additionalProperties": false
+    },
+    "CarrierReturnPlan": {
+      "type": "object",
+      "properties": {
+        "kind": { "$ref": "#/$defs/CarrierReturnKind" },
+        "deltaV": { "type": "number", "x-unit": "m/s", "description": "Estimated delta-v of the return or disposal." },
+        "available": { "type": "number", "x-unit": "m/s", "description": "Delta-v the carrier has left once the payloads are out." },
+        "text": { "type": "string" },
+        "fallback": { "type": "boolean", "description": "The carrier cannot come home and this is what it does instead." }
+      },
+      "required": ["kind", "deltaV", "available", "text", "fallback"],
+      "additionalProperties": false
+    },
+    "CarrierReturnKind": {
+      "type": "string",
+      "description": "land: deorbit at home and come down on parachutes. transferAndLand: transfer home first. disposal: park on an orbit clear of the constellation. stay: stay on the release orbit. burnUp: lower the periapsis deep into the atmosphere so it burns up.",
+      "enum": ["land", "transferAndLand", "disposal", "stay", "burnUp"]
+    },
+    "EndOfLife": {
+      "type": "string",
+      "description": "The operator's pick for a transfer stage once its satellites are out. burnUp: lower the periapsis into the atmosphere. landHome: deorbit, or transfer home, and land on parachutes. park: a disposal orbit clear of the constellation.",
+      "enum": ["burnUp", "landHome", "park"]
+    },
+    "LaunchStagePlan": {
+      "description": "The stage that lifted the stack: whether it splits off in the parking orbit and lands at the launch pad.",
+      "type": "object",
+      "properties": {
+        "comesHome": { "type": "boolean", "description": "It splits off first and gets its own return operation once the satellites are out." },
+        "name": { "anyOf": [{ "type": "string" }, { "type": "null" }], "description": "Its vessel name once split, such as Relay Carrier Launch Stage; null when none was found." },
+        "deltaV": { "type": "number", "x-unit": "m/s", "description": "Estimated deorbit delta-v." },
+        "available": { "type": "number", "x-unit": "m/s", "description": "Its own delta-v." },
+        "text": { "type": "string", "description": "What it does, or why it stays attached." }
+      },
+      "required": ["comesHome", "name", "deltaV", "available", "text"],
+      "additionalProperties": false
+    },
+    "AutoAction": {
+      "type": "object",
+      "properties": {
+        "vesselId": { "type": "integer", "format": "uint32" },
+        "text": { "type": "string", "description": "One automatic action, such as jettison 1 fairing above 63 km." }
+      },
+      "required": ["vesselId", "text"],
+      "additionalProperties": false
+    },
+    "ContingencyNote": {
+      "type": "object",
+      "properties": {
+        "severity": { "$ref": "#/$defs/Alert" },
+        "vesselId": { "type": "integer", "format": "uint32" },
+        "text": { "type": "string" }
+      },
+      "required": ["severity", "vesselId", "text"],
+      "additionalProperties": false
+    },
+    "Alert": {
+      "description": "red blocks approval; amber warns.",
+      "type": "string",
+      "enum": ["amber", "red"]
+    },
+    "OperationStatus": {
+      "description": "One operation and where it stands.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "codename": { "type": "string" },
+        "change": { "$ref": "#/$defs/OrbitChangeRequest" },
+        "description": { "type": "string" },
+        "state": { "$ref": "#/$defs/OperationState" },
+        "burns": { "type": "array", "items": { "$ref": "#/$defs/BurnPlan" } },
+        "burnIndex": { "type": "integer", "format": "int32", "description": "Index into burns of the burn now due or flying." },
+        "deltaVDone": { "type": "number", "x-unit": "m/s", "description": "Delta-v flown in the current burn." },
+        "note": { "anyOf": [{ "type": "string" }, { "type": "null" }], "description": "Latest timeline note, such as a re-plan, a released control or a missed window." },
+        "landingPrediction": { "anyOf": [{ "$ref": "#/$defs/LandingPrediction" }, { "type": "null" }], "description": "For land: the latest predicted touchdown point; otherwise null." },
+        "alarm": { "anyOf": [{ "$ref": "#/$defs/FlightAlarm" }, { "type": "null" }], "description": "A red alert: the vessel is headed into the ground, or its landing would come down too hard; otherwise null." },
+        "descent": { "anyOf": [{ "$ref": "#/$defs/DescentStatus" }, { "type": "null" }], "description": "For land: the descent as last flown, once descent guidance has taken over; otherwise null." }
+      },
+      "required": ["id", "codename", "change", "description", "state", "burns", "burnIndex", "deltaVDone", "note", "landingPrediction", "alarm", "descent"],
+      "additionalProperties": false
+    },
+    "DescentStatus": {
+      "description": "Where a descent stands: the guidance phase, height over the ground under the vessel, vertical speed and the predicted miss.",
+      "type": "object",
+      "properties": {
+        "phase": { "$ref": "#/$defs/DescentPhase" },
+        "altitude": { "type": "number", "x-unit": "m" },
+        "verticalSpeed": { "type": "number", "x-unit": "m/s", "description": "Negative while coming down." },
+        "miss": { "anyOf": [{ "type": "number", "x-unit": "m" }, { "type": "null" }], "description": "Predicted touchdown to target; null before the first prediction reaches the ground." }
+      },
+      "required": ["phase", "altitude", "verticalSpeed", "miss"],
+      "additionalProperties": false
+    },
+    "DescentPhase": {
+      "type": "string",
+      "description": "correct: small burns to put the predicted touchdown on the target. coast: engines off. brake: the braking burn. final: the vertical touchdown. landed: on the ground.",
+      "enum": ["correct", "coast", "brake", "final", "landed"]
+    },
+    "FlightAlarm": {
+      "description": "A red alert on an operation. impact: the coast comes down under the body's safe floor (the top of its air or its highest terrain) where no landing is planned; the operation holds. landing: a planned landing would touch down too hard, cannot brake, or can no longer be flown before its deorbit.",
+      "type": "object",
+      "properties": {
+        "kind": { "$ref": "#/$defs/AlarmKind" },
+        "body": { "type": "string" },
+        "text": { "type": "string", "description": "What is wrong, such as \"on impact course with Mun, periapsis -56.7 km\"." }
+      },
+      "required": ["kind", "body", "text"],
+      "additionalProperties": false
+    },
+    "AlarmKind": {
+      "type": "string",
+      "enum": ["impact", "landing"]
+    },
+    "OperationState": {
+      "description": "Where an operation stands. hold: paused after a game load or a released control, waiting for resume.",
+      "type": "string",
+      "enum": ["draft", "briefed", "approved", "uploaded", "waiting", "executing", "hold", "done", "missed", "scrubbed", "aborted"]
+    },
+    "Prompt": {
+      "description": "A question the server will not act on without the operator's answer. No answer means no action.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer", "format": "uint32" },
+        "kind": { "$ref": "#/$defs/PromptKind" },
+        "operationId": { "type": "string" },
+        "vesselId": { "type": "integer", "format": "uint32" },
+        "text": { "type": "string" },
+        "untilUt": { "anyOf": [{ "type": "number", "x-unit": "s" }, { "type": "null" }], "description": "For warp: the universal time the warp would stop at." }
+      },
+      "required": ["id", "kind", "operationId", "vesselId", "text", "untilUt"],
+      "additionalProperties": false
+    },
+    "PromptKind": {
+      "description": "warp: time warp to the next burn, or through every burn of a group operation. switch: switch to the vessel that burns next. fly: let FLTCOM fly the burn of the vessel the player is flying.",
+      "type": "string",
+      "enum": ["warp", "switch", "fly"]
+    },
+    "Group": {
+      "description": "A saved, named group of vessels that plans and flies as one unit.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "vesselIds": { "type": "array", "items": { "type": "integer", "format": "uint32" } }
+      },
+      "required": ["id", "name", "vesselIds"],
+      "additionalProperties": false
+    },
+    "GroupRoster": {
+      "description": "Every saved group. Sent on connect and on each change; the display replaces its groups with each one.",
+      "type": "object",
+      "properties": {
+        "protocolVersion": { "type": "integer", "format": "int32" },
+        "type": { "const": "groups" },
+        "groups": { "type": "array", "items": { "$ref": "#/$defs/Group" }, "x-uniqueBy": "id" }
+      },
+      "required": ["protocolVersion", "type", "groups"],
+      "additionalProperties": false
+    },
+    "GroupAction": {
+      "type": "string",
+      "enum": ["create", "rename", "delete", "add", "remove"]
+    },
+    "GroupEdit": {
+      "description": "Create, rename or delete a group, or add or remove members. create uses name and vesselIds; rename uses groupId and name; add and remove use groupId and vesselIds.",
+      "type": "object",
+      "properties": {
+        "protocolVersion": { "type": "integer", "format": "int32" },
+        "type": { "const": "groupEdit" },
+        "action": { "$ref": "#/$defs/GroupAction" },
+        "groupId": { "anyOf": [{ "type": "string" }, { "type": "null" }] },
+        "name": { "anyOf": [{ "type": "string" }, { "type": "null" }] },
+        "vesselIds": { "type": "array", "items": { "type": "integer", "format": "uint32" } }
+      },
+      "required": ["protocolVersion", "type", "action", "groupId", "name", "vesselIds"],
+      "additionalProperties": false
+    }
+  }
+}

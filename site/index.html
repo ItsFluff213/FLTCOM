@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="FLTCOM is a fleet manager for Kerbal Space Program 1.12.5. Track every ship, review an operation briefing, and let it fly launches, transfers, landings and orbit changes.">
+  <meta name="theme-color" content="#101112">
+  <title>FLTCOM — Fleet control for Kerbal Space Program</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header wrap">
+    <a class="wordmark" href="#" aria-label="FLTCOM home">FLTCOM<span aria-hidden="true"> /</span></a>
+    <nav aria-label="Main navigation">
+      <a href="#features">Overview</a>
+      <a href="#gallery">Display</a>
+      <a href="#guide">Get started</a>
+      <a href="#roadmap">Roadmap</a>
+      <a href="https://github.com/ItsFluff213/FLTCOM">GitHub <span aria-hidden="true">↗</span></a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="hero wrap" aria-labelledby="hero-title">
+      <p class="eyebrow"><span class="status-dot" aria-hidden="true"></span> Fleet control / Kerbal Space Program 1.12.5</p>
+      <div class="hero-intro">
+        <h1 id="hero-title">Every ship.<br>Under command.</h1>
+        <div class="hero-copy">
+          <p class="pitch">Track every ship in your save and let FLTCOM fly your orbit changes.</p>
+          <p>A cinematic mission-briefing display, in your browser. Compose an operation, review the plan, give the go-ahead.</p>
+          <div class="actions">
+            <a class="button primary" href="https://github.com/ItsFluff213/FLTCOM/releases">Get FLTCOM <span aria-hidden="true">↗</span></a>
+            <a class="text-link" href="#guide">Your first operation <span aria-hidden="true">↓</span></a>
+          </div>
+          <p class="release-note">Public preview · Manual install · Coming to CKAN</p>
+        </div>
+      </div>
+      <figure class="hero-shot">
+        <a href="img/hero-kerbin.webp" aria-label="Open the Kerbin fleet screenshot at full size">
+          <img src="img/hero-kerbin.webp" width="1600" height="1000" fetchpriority="high" alt="FLTCOM’s 3D map centred on Kerbin with a station’s orbit highlighted, the fleet list below and the station’s dossier on the right.">
+        </a>
+        <figcaption><span><span class="caption-index">01 /</span> The whole fleet, in view.</span><span>Kerbin view · Demo telemetry · Open for full size <span aria-hidden="true">↗</span></span></figcaption>
+      </figure>
+      <div class="spec-strip" aria-label="Project essentials">
+        <p><span>Game</span> KSP 1.12.5</p>
+        <p><span>Display</span> Localhost browser</p>
+        <p><span>Control</span> Approve, then fly</p>
+        <p><span>Licence</span> GPL-3.0</p>
+      </div>
+    </section>
+
+    <section class="section wrap" id="features" aria-labelledby="features-title">
+      <div class="section-heading">
+        <p class="eyebrow">01 / What it does</p>
+        <h2 id="features-title">You set the objective.<br>FLTCOM handles the burns.</h2>
+      </div>
+      <div class="feature-grid">
+        <article>
+          <span class="item-number" aria-hidden="true">01</span>
+          <h3>See every ship</h3>
+          <p>Follow the vessels in your loaded save, including the ones you aren’t flying. Select a ship on the tactical map or fleet list to inspect its orbit, resources, communications and stages.</p>
+        </article>
+        <article>
+          <span class="item-number" aria-hidden="true">02</span>
+          <h3>Read the briefing</h3>
+          <p>Every plan becomes <span class="inline-label">OPERATION &lt;codename&gt;</span>: a burn timeline, a per-stage delta-v budget and contingencies. Review the numbers before you approve. Red contingencies block approval.</p>
+        </article>
+        <article>
+          <span class="item-number" aria-hidden="true">03</span>
+          <h3>Give the go-ahead</h3>
+          <p>Approve the operation, answer the warp prompt when it appears, and watch the ship fly. Named groups get individual burn plans; group members outside physics range can burn in the background.</p>
+        </article>
+      </div>
+      <div class="maneuvers">
+        <h3>Orbit changes available now</h3>
+        <ul class="tag-list">
+          <li>Circularize</li><li>Change apoapsis</li><li>Change periapsis</li><li>Circular orbit at altitude</li><li>Change inclination</li><li>Standard low orbit</li><li>Raise apoapsis by an amount</li>
+        </ul>
+        <p class="small muted">For ships already in orbit. A ship on the launch pad gets a launch to orbit; ships in orbit can also transfer, rendezvous, dock, land or deploy a constellation.</p>
+      </div>
+    </section>
+
+    <section class="section gallery-section" id="gallery" aria-labelledby="gallery-title">
+      <div class="wrap">
+        <div class="section-heading split-heading">
+          <div><p class="eyebrow">02 / How it looks</p><h2 id="gallery-title">A seat at fleet control.</h2></div>
+          <p>A cinematic mission-briefing display for a second monitor. These captures show the current interface with test saves and demo telemetry. Select an image to inspect it at full size.</p>
+        </div>
+        <div class="gallery-grid">
+          <figure>
+            <a href="img/briefing-launch.webp" aria-label="Open the launch briefing screenshot at full size"><img src="img/briefing-launch.webp" width="1600" height="1000" loading="lazy" decoding="async" alt="Operation briefing for launching Kerbal X to a 100 km orbit: burn timeline, final orbit, delta-v budget, stage plan, automatic actions, plan preview, and Approve and Scrub controls."></a>
+            <figcaption><span class="caption-index">02 /</span><div><h3>Know the plan before ignition.</h3><p>Every operation gets a codename, a burn timeline, a stage budget, its automatic actions and a plan preview. Demo telemetry.</p></div></figcaption>
+          </figure>
+          <figure>
+            <a href="img/live-burn.webp" aria-label="Open the live burn screenshot at full size"><img src="img/live-burn.webp" width="1600" height="1000" loading="lazy" decoding="async" alt="Kerbal X igniting on the launch pad: BURNING and IGNITION in the corner, a delta-v progress bar, and the target orbit drawn around Kerbin."></a>
+            <figcaption><span class="caption-index">03 /</span><div><h3>Watch it fly.</h3><p>The countdown turns into ignition, and a delta-v bar fills as the burn goes. Demo telemetry.</p></div></figcaption>
+          </figure>
+          <figure>
+            <a href="img/mun-descent.webp" aria-label="Open the Mun descent screenshot at full size"><img src="img/mun-descent.webp" width="1600" height="1000" loading="lazy" decoding="async" alt="A lander descending to the Mun: the surface map with the landing marker, and the descent readout showing altitude, vertical speed, time to touchdown and miss distance."></a>
+            <figcaption><span class="caption-index">04 /</span><div><h3>Land where you point.</h3><p>A live descent readout, with the landing marker on the surface map. Demo telemetry.</p></div></figcaption>
+          </figure>
+          <figure>
+            <a href="img/polar-ring.webp" aria-label="Open the polar ring screenshot at full size"><img src="img/polar-ring.webp" width="1600" height="1000" loading="lazy" decoding="async" alt="Three relays evenly spaced on a polar ring around Kerbin, with the empty carrier on a lower orbit inside the ring."></a>
+            <figcaption><span class="caption-index">05 /</span><div><h3>One order, one constellation.</h3><p>A carrier releases its satellites into an evenly spaced ring, equatorial or tilted. Demo telemetry.</p></div></figcaption>
+          </figure>
+          <figure>
+            <a href="img/system-sun.webp" aria-label="Open the system view screenshot at full size"><img src="img/system-sun.webp" width="1600" height="1000" loading="lazy" decoding="async" alt="Sun-centred 3D map with planet orbits, labelled planets and ships, and asteroids near Kerbin’s orbit."></a>
+            <figcaption><span class="caption-index">06 /</span><div><h3>Pull back to the system.</h3><p>Centre the map on the Sun to see the whole fleet, with labels kept apart. Demo telemetry.</p></div></figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="section wrap" id="guide" aria-labelledby="guide-title">
+      <div class="section-heading"><p class="eyebrow">03 / How to use it</p><h2 id="guide-title">From install to ignition.</h2></div>
+      <div class="guide-grid">
+        <div class="setup">
+          <h3>Install FLTCOM</h3>
+          <ol class="simple-steps">
+            <li>Download the packaged mod from <a href="https://github.com/ItsFluff213/FLTCOM/releases">GitHub Releases</a>. Choose the release package, not the source-code archive.</li>
+            <li>Copy its <code>GameData/FLTCOM</code> folder into your KSP installation’s <code>GameData</code> folder. The plugin should be at <code>GameData/FLTCOM/FLTCOM.dll</code>.</li>
+            <li>Start KSP 1.12.5 and load a save. Back up a save you care about before trying a development build.</li>
+          </ol>
+          <p class="small muted">Coming to CKAN. Until it is listed, use the manual install above. If no packaged release is available yet, check back for the next release.</p>
+          <div class="local-display">
+            <p class="eyebrow">Open the display</p>
+            <a class="local-url" href="http://127.0.0.1:47800/">http://127.0.0.1:47800/ <span aria-hidden="true">↗</span></a>
+            <p>Use a browser on the same computer as KSP, or click the in-game FLTCOM toolbar button. Move the browser to a second monitor if you have one.</p>
+          </div>
+        </div>
+        <div class="first-operation">
+          <h3>Your first operation</h3>
+          <ol class="operation-steps">
+            <li><h4>Select a ship</h4><p>Pick an orbiting vessel from the map or fleet list. It needs fuel and maneuver-direction SAS; an uncrewed ship needs a home signal when CommNet is enabled.</p></li>
+            <li><h4>Compose an orbit change</h4><p>Choose <span class="inline-label">CIRCULARIZE</span> for a first try, or another operation. Enter an altitude in kilometres or inclination in degrees when asked, then select <span class="inline-label">BRIEF</span>.</p></li>
+            <li><h4>Review the briefing</h4><p>Read the burn timeline, stage budget and contingencies. Clear any red issues before selecting <span class="inline-label">APPROVE</span>, or use <span class="inline-label">SCRUB</span> to discard the plan.</p></li>
+            <li><h4>Answer the prompt</h4><p>When offered, select <span class="inline-label">WARP</span> to advance toward the burn or <span class="inline-label">NO</span> to wait at normal speed. Confirm a vessel switch if requested.</p></li>
+            <li><h4>Watch it fly</h4><p>Follow the countdown and operation status as FLTCOM executes the burns. Use <span class="inline-label">SCRUB</span> to stop the operation; pilot input also releases active flight control.</p></li>
+          </ol>
+        </div>
+      </div>
+      <aside class="groups-guide" aria-labelledby="groups-title">
+        <div><p class="eyebrow">Working with groups</p><h3 id="groups-title">One order. Several ships.</h3></div>
+        <div>
+          <p>Select a ship, enter a name in <span class="inline-label">NEW GROUP</span>, then select <span class="inline-label">CREATE</span>. Select another ship and use the group’s <span class="inline-label">ADD</span> button. Pick the group before composing a change.</p>
+          <p>Apply the same change to every member, set a common circular-orbit altitude, or choose <span class="inline-label">SPREAD EVENLY AROUND ONE ORBIT</span>. Each ship gets its own burns and budget. For spacing, start with ships around the same body and in the same orbital plane; matching altitude alone does not align their planes.</p>
+          <p class="small muted">Group ships outside physics range can burn in the background and consume propellant. Nearby loaded ships need active flight. If you’re flying a member, the display asks whether FLTCOM should fly it or you will.</p>
+        </div>
+      </aside>
+    </section>
+
+    <section class="section wrap faq-section" id="faq" aria-labelledby="faq-title">
+      <div class="section-heading"><p class="eyebrow">04 / FAQ</p><h2 id="faq-title">Before you take command.</h2></div>
+      <div class="faq-list">
+        <details><summary>Can I open the display on another computer?</summary><p>No. FLTCOM’s server listens on localhost only. The browser and KSP must run on the same computer. A second monitor works; a phone or another computer on your network cannot connect. The public website you’re reading is separate from the live display.</p></details>
+        <details><summary>Which KSP version does it support?</summary><p>Kerbal Space Program 1.12.5. Other versions are not claimed as supported.</p></details>
+        <details><summary>Does it work with other mods?</summary><p>Compatibility depends on the mod. FLTCOM refuses to start its display server when it detects Luna Multiplayer, Principia or Real Solar System. It also refuses to take over a loaded vessel while it detects MechJeb or kOS flight control. Universal compatibility with modded parts and propulsion is not guaranteed.</p></details>
+        <details><summary>Can I use it in career mode?</summary><p>Yes, once Mission Control and the Tracking Station have unlocked maneuver planning. The vessel also needs a pilot or probe core capable of maneuver-direction SAS. An uncrewed craft needs a home signal when CommNet is enabled; the briefing reports blockers.</p></details>
+        <details><summary>Is it safe for my save?</summary><p>FLTCOM is in development, so back up your save before using it. Approved operations change real vessel orbits and consume fuel. Briefings block red contingencies, and running operations are placed on hold when a save is loaded, but these safeguards are not a guarantee. You can scrub an operation; pilot input, Abort or <kbd>Alt</kbd> + <kbd>H</kbd> releases active autonomous control.</p></details>
+        <details><summary>Does it need an account or internet connection?</summary><p>The live display is served by the mod on your own computer and uses bundled assets and fonts. There is no account to create. This public site also uses local fonts and has no external trackers.</p></details>
+      </div>
+    </section>
+
+    <section class="section wrap" id="roadmap" aria-labelledby="roadmap-title">
+      <div class="section-heading split-heading">
+        <div><p class="eyebrow">05 / Roadmap</p><h2 id="roadmap-title">In orbit. Going further.</h2></div>
+        <p>“Built” means implemented in the current code, not a finished release. Planned work has no announced delivery date.</p>
+      </div>
+      <ul class="roadmap-list">
+        <li><span class="status built">Built</span><div><h3>Fleet display &amp; vessel dossiers</h3><p>Tactical map, fleet list, orbit and resource details, communications and stage blueprints.</p></div><span class="roadmap-number" aria-hidden="true">01</span></li>
+        <li><span class="status built">Built</span><div><h3>Orbit changes &amp; autonomous burns</h3><p>Briefings, stage budgets, contingencies, approval, warp prompts and burn execution.</p></div><span class="roadmap-number" aria-hidden="true">02</span></li>
+        <li><span class="status built">Built</span><div><h3>Groups &amp; background burns</h3><p>Named groups, common changes, orbital spacing and burns for unloaded group members.</p></div><span class="roadmap-number" aria-hidden="true">03</span></li>
+        <li><span class="status built">Built</span><div><h3>Launch to orbit &amp; landings</h3><p>From the launch pad to a target orbit, and back down on the pad, the runway or chosen coordinates.</p></div><span class="roadmap-number" aria-hidden="true">04</span></li>
+        <li><span class="status built">Built</span><div><h3>Moon &amp; planet transfers</h3><p>Journeys beyond the ship’s current central body, with a transfer window chart for planets.</p></div><span class="roadmap-number" aria-hidden="true">05</span></li>
+        <li><span class="status built">Built</span><div><h3>Rendezvous, docking &amp; constellations</h3><p>Bring ships together, dock to a chosen port, and deploy satellite rings from a carrier.</p></div><span class="roadmap-number" aria-hidden="true">06</span></li>
+        <li><span class="status built">Built</span><div><h3>The 3D look</h3><p>A 3D map of the whole system and a refreshed display. This preview asks for your feedback on it.</p></div><span class="roadmap-number" aria-hidden="true">07</span></li>
+        <li><span class="status">Planned</span><div><h3>CKAN</h3><p>Install and update FLTCOM through CKAN.</p></div><span class="roadmap-number" aria-hidden="true">08</span></li>
+      </ul>
+    </section>
+
+    <section class="section credits wrap" id="credits" aria-labelledby="credits-title">
+      <div><p class="eyebrow">06 / Licence &amp; credits</p><h2 id="credits-title">Open code.<br>Shared foundations.</h2></div>
+      <div>
+        <p>FLTCOM is free software under <a href="https://github.com/ItsFluff213/FLTCOM/blob/main/LICENSE">GNU GPL-3.0</a>. Copyright © 2026 the FLTCOM contributors.</p>
+        <p><a href="https://github.com/MuMech/MechJeb2">MechJeb</a> is also GPL-3.0. FLTCOM’s licence allows reuse of its maths, with original copyright notices retained in any ported files.</p>
+        <p>Typography: IBM Plex Mono by IBM and Saira Condensed by the Saira Project Authors. Both are bundled under the SIL Open Font License 1.1. Read the <a href="fonts/IBMPlexMono/OFL.txt">IBM Plex Mono licence</a> and <a href="fonts/SairaCondensed/OFL.txt">Saira Condensed licence</a>.</p>
+        <p class="small muted">An independent mod for Kerbal Space Program. Screenshots show FLTCOM’s own display; this site includes no game textures, logos or artwork.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer wrap">
+    <a class="wordmark" href="#" aria-label="Back to top">FLTCOM<span aria-hidden="true"> /</span></a>
+    <p>Fleet control. On your terms.</p>
+    <nav aria-label="Footer navigation"><a href="https://github.com/ItsFluff213/FLTCOM/releases">Releases <span aria-hidden="true">↗</span></a><a href="https://github.com/ItsFluff213/FLTCOM">Source <span aria-hidden="true">↗</span></a><a href="#faq">FAQ</a></nav>
+  </footer>
+</body>
+</html>

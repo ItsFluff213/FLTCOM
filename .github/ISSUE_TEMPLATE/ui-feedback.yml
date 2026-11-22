@@ -1,0 +1,74 @@
+name: UI feedback
+description: Tell us how the FLTCOM display feels to use. This preview exists to find out whether the interface works.
+title: "[UI] "
+labels: ["ui-feedback"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for trying the preview. Short, honest answers help most. One screen per issue is easiest to act on.
+  - type: dropdown
+    id: screen
+    attributes:
+      label: Which screen?
+      options:
+        - Map
+        - Fleet list
+        - Dossier
+        - Compose or briefing
+        - Live operation
+        - Landing
+        - Groups or constellation
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: confusing
+    attributes:
+      label: What felt confusing or slow?
+      description: What were you trying to do, and where did you get stuck, wait, or guess?
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
+      description: What would have made it clear or quick?
+    validations:
+      required: true
+  - type: dropdown
+    id: look
+    attributes:
+      label: How much do you like the look?
+      description: 1 is not at all, 5 is a lot.
+      options:
+        - "1"
+        - "2"
+        - "3"
+        - "4"
+        - "5"
+    validations:
+      required: true
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: Screenshot
+      description: Optional. Drag an image here. Crop out anything personal, such as your user name or file paths.
+    validations:
+      required: false
+  - type: input
+    id: version
+    attributes:
+      label: FLTCOM version
+      description: The display header shows it after LINK, for example FLTCOM 0.1.0.
+      placeholder: "0.1.0"
+    validations:
+      required: true
+  - type: input
+    id: screen-size
+    attributes:
+      label: Screen size
+      description: Browser window size or monitor resolution, and whether the display is on a second monitor.
+      placeholder: "1920x1080, second monitor"
+    validations:
+      required: false

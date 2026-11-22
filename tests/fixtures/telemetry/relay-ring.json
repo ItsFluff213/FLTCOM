@@ -1,0 +1,918 @@
+{
+  "protocolVersion": 14,
+  "type": "fleet",
+  "seq": 0,
+  "ut": 5184000,
+  "warpRate": 1,
+  "activeVesselId": 1101,
+  "bodies": [
+    {
+      "name": "Sun",
+      "orbit": null,
+      "radius": 261600000,
+      "gravParameter": 1172332800000000000,
+      "sphereOfInfluence": null,
+      "atmosphereHeight": 600000,
+      "rotationPeriod": 432000,
+      "rotationAngle": 0,
+      "highestTerrainAltitude": 0,
+      "color": "#ffd84a",
+      "texture": null
+    },
+    {
+      "name": "Moho",
+      "orbit": {
+        "referenceBody": "Sun",
+        "semiMajorAxis": 5263138304,
+        "eccentricity": 0.2,
+        "inclination": 0.12217304763960307,
+        "longitudeOfAscendingNode": 1.2217304763960306,
+        "argumentOfPeriapsis": 0.2617993877991494,
+        "meanAnomaly": 3.14
+      },
+      "radius": 250000,
+      "gravParameter": 168609380000,
+      "sphereOfInfluence": 9646663,
+      "atmosphereHeight": 0,
+      "rotationPeriod": 1210000,
+      "rotationAngle": 1.786294004685768,
+      "highestTerrainAltitude": 6817,
+      "color": "#8c6b4f",
+      "texture": "/art/body/Moho.png"
+    },
+    {
+      "name": "Eve",
+      "orbit": {
+        "referenceBody": "Sun",
+        "semiMajorAxis": 9832684544,
+        "eccentricity": 0.01,
+        "inclination": 0.03665191429188092,
+        "longitudeOfAscendingNode": 0.2617993877991494,
+        "argumentOfPeriapsis": 0,
+        "meanAnomaly": 3.14
+      },
+      "radius": 700000,
+      "gravParameter": 8171730200000,
+      "sphereOfInfluence": 85109365,
+      "atmosphereHeight": 90000,
+      "rotationPeriod": 80500,
+      "rotationAngle": 2.49766372459311,
+      "highestTerrainAltitude": 7526,
+      "color": "#8a4fc9",
+      "texture": "/art/body/Eve.png"
+    },
+    {
+      "name": "Gilly",
+      "orbit": {
+        "referenceBody": "Eve",
+        "semiMajorAxis": 31500000,
+        "eccentricity": 0.55,
+        "inclination": 0.20943951023931956,
+        "longitudeOfAscendingNode": 1.3962634015954636,
+        "argumentOfPeriapsis": 0.17453292519943295,
+        "meanAnomaly": 0.9
+      },
+      "radius": 13000,
+      "gravParameter": 8289449.8,
+      "sphereOfInfluence": 126123,
+      "atmosphereHeight": 0,
+      "rotationPeriod": 28255,
+      "rotationAngle": 2.9653610359666445,
+      "highestTerrainAltitude": 6401,
+      "color": "#a08f7a",
+      "texture": "/art/body/Gilly.png"
+    },
+    {
+      "name": "Kerbin",
+      "orbit": {
+        "referenceBody": "Sun",
+        "semiMajorAxis": 13599840256,
+        "eccentricity": 0,
+        "inclination": 0,
+        "longitudeOfAscendingNode": 0,
+        "argumentOfPeriapsis": 0,
+        "meanAnomaly": 3.14
+      },
+      "radius": 600000,
+      "gravParameter": 3531600000000,
+      "sphereOfInfluence": 84159286,
+      "atmosphereHeight": 70000,
+      "rotationPeriod": 21549.425,
+      "rotationAngle": 3.5390876210639135,
+      "highestTerrainAltitude": 6767,
+      "color": "#4f8fd6",
+      "texture": "/art/body/Kerbin.png"
+    },
+    {
+      "name": "Mun",
+      "orbit": {
+        "referenceBody": "Kerbin",
+        "semiMajorAxis": 12000000,
+        "eccentricity": 0,
+        "inclination": 0,
+        "longitudeOfAscendingNode": 0,
+        "argumentOfPeriapsis": 0,
+        "meanAnomaly": 1.7
+      },
+      "radius": 200000,
+      "gravParameter": 65138398000,
+      "sphereOfInfluence": 2429559,
+      "atmosphereHeight": 0,
+      "rotationPeriod": 138984.38,
+      "rotationAngle": 1.8796493657114084,
+      "highestTerrainAltitude": 7061,
+      "color": "#9a9a9a",
+      "texture": "/art/body/Mun.png"
+    },
+    {
+      "name": "Minmus",
+      "orbit": {
+        "referenceBody": "Kerbin",
+        "semiMajorAxis": 47000000,
+        "eccentricity": 0,
+        "inclination": 0.10471975511965978,
+        "longitudeOfAscendingNode": 1.361356816555577,
+        "argumentOfPeriapsis": 0.6632251157578453,
+        "meanAnomaly": 0.9
+      },
+      "radius": 60000,
+      "gravParameter": 1765800000,
+      "sphereOfInfluence": 2247428,
+      "atmosphereHeight": 0,
+      "rotationPeriod": 40400,
+      "rotationAngle": 1.9907121765321563,
+      "highestTerrainAltitude": 5725,
+      "color": "#9fe0c8",
+      "texture": "/art/body/Minmus.png"
+    },
+    {
+      "name": "Duna",
+      "orbit": {
+        "referenceBody": "Sun",
+        "semiMajorAxis": 20726155264,
+        "eccentricity": 0.051,
+        "inclination": 0.0010471975511965976,
+        "longitudeOfAscendingNode": 2.3649211364523164,
+        "argumentOfPeriapsis": 0,
+        "meanAnomaly": 3.14
+      },
+      "radius": 320000,
+      "gravParameter": 301363210000,
+      "sphereOfInfluence": 47921949,
+      "atmosphereHeight": 50000,
+      "rotationPeriod": 65517.859,
+      "rotationAngle": 0.775751223991243,
+      "highestTerrainAltitude": 8264,
+      "color": "#c4553a",
+      "texture": "/art/body/Duna.png"
+    },
+    {
+      "name": "Ike",
+      "orbit": {
+        "referenceBody": "Duna",
+        "semiMajorAxis": 3200000,
+        "eccentricity": 0.03,
+        "inclination": 0.003490658503988659,
+        "longitudeOfAscendingNode": 0,
+        "argumentOfPeriapsis": 0,
+        "meanAnomaly": 1.7
+      },
+      "radius": 130000,
+      "gravParameter": 18568369000,
+      "sphereOfInfluence": 1049599,
+      "atmosphereHeight": 0,
+      "rotationPeriod": 65517.862,
+      "rotationAngle": 0.7757284600894749,
+      "highestTerrainAltitude": 12738,
+      "color": "#7d7d7d",
+      "texture": "/art/body/Ike.png"
+    },
+    {
+      "name": "Dres",
+      "orbit": {
+        "referenceBody": "Sun",
+        "semiMajorAxis": 40839348203,
+        "eccentricity": 0.145,
+        "inclination": 0.08726646259971647,
+        "longitudeOfAscendingNode": 4.886921905584122,
+        "argumentOfPeriapsis": 1.5707963267948966,
+        "meanAnomaly": 3.14
+      },
+      "radius": 138000,
+      "gravParameter": 21484489000,
+      "sphereOfInfluence": 32832840,
+      "atmosphereHeight": 0,
+      "rotationPeriod": 34800,
+      "rotationAngle": 6.066523744863076,
+      "highestTerrainAltitude": 5700,
+      "color": "#9b8f86",
+      "texture": "/art/body/Dres.png"
+    },
+    {
+      "name": "Jool",
+      "orbit": {
+        "referenceBody": "Sun",
+        "semiMajorAxis": 68773560320,
+        "eccentricity": 0.05,
+        "inclination": 0.02275909344600606,
+        "longitudeOfAscendingNode": 0.9075712110370514,
+        "argumentOfPeriapsis": 0,
+        "meanAnomaly": 0.1
+      },
+      "radius": 6000000,
+      "gravParameter": 282528000000000,
+      "sphereOfInfluence": 2455985200,
+      "atmosphereHeight": 200000,
+      "rotationPeriod": 36000,
+      "rotationAngle": 0,
+      "highestTerrainAltitude": 0,
+      "color": "#6fbf3a",
+      "texture": "/art/body/Jool.png"
+    },
+    {
+      "name": "Laythe",
+      "orbit": {
+        "referenceBody": "Jool",
+        "semiMajorAxis": 27184000,
+        "eccentricity": 0,
+        "inclination": 0,
+        "longitudeOfAscendingNode": 0,
+        "argumentOfPeriapsis": 0,
+        "meanAnomaly": 3.14
+      },
+      "radius": 500000,
+      "gravParameter": 1962000000000,
+      "sphereOfInfluence": 3723646,
+      "atmosphereHeight": 50000,
+      "rotationPeriod": 52980.879,
+      "rotationAngle": 5.319478079550301,
+      "highestTerrainAltitude": 6079,
+      "color": "#3d5fa8",
+      "texture": "/art/body/Laythe.png"
+    },
+    {
+      "name": "Vall",
+      "orbit": {
+        "referenceBody": "Jool",
+        "semiMajorAxis": 43152000,
+        "eccentricity": 0,
+        "inclination": 0,
+        "longitudeOfAscendingNode": 0,
+        "argumentOfPeriapsis": 0,
+        "meanAnomaly": 0.9
+      },
+      "radius": 300000,
+      "gravParameter": 207481500000,
+      "sphereOfInfluence": 2406401,
+      "atmosphereHeight": 0,
+      "rotationPeriod": 105962.09,
+      "rotationAngle": 5.800368566994223,
+      "highestTerrainAltitude": 7985,
+      "color": "#a6c6d9",
+      "texture": "/art/body/Vall.png"
+    },
+    {
+      "name": "Tylo",
+      "orbit": {
+        "referenceBody": "Jool",
+        "semiMajorAxis": 68500000,
+        "eccentricity": 0,
+        "inclination": 0.0004363323129985824,
+        "longitudeOfAscendingNode": 0,
+        "argumentOfPeriapsis": 0,
+        "meanAnomaly": 3.14
+      },
+      "radius": 600000,
+      "gravParameter": 2825280000000,
+      "sphereOfInfluence": 10856518,
+      "atmosphereHeight": 0,
+      "rotationPeriod": 211926.36,
+      "rotationAngle": 2.8986032689550143,
+      "highestTerrainAltitude": 11290,
+      "color": "#d8c8b0",
+      "texture": "/art/body/Tylo.png"
+    },
+    {
+      "name": "Bop",
+      "orbit": {
+        "referenceBody": "Jool",
+        "semiMajorAxis": 128500000,
+        "eccentricity": 0.235,
+        "inclination": 0.2617993877991494,
+        "longitudeOfAscendingNode": 0.17453292519943295,
+        "argumentOfPeriapsis": 0.4363323129985824,
+        "meanAnomaly": 0.9
+      },
+      "radius": 65000,
+      "gravParameter": 2486834900,
+      "sphereOfInfluence": 1221061,
+      "atmosphereHeight": 0,
+      "rotationPeriod": 544507.43,
+      "rotationAngle": 3.2705942653232825,
+      "highestTerrainAltitude": 21757,
+      "color": "#8a7458",
+      "texture": "/art/body/Bop.png"
+    },
+    {
+      "name": "Pol",
+      "orbit": {
+        "referenceBody": "Jool",
+        "semiMajorAxis": 179890000,
+        "eccentricity": 0.171,
+        "inclination": 0.07417649320975901,
+        "longitudeOfAscendingNode": 0.03490658503988659,
+        "argumentOfPeriapsis": 0.2617993877991494,
+        "meanAnomaly": 0.9
+      },
+      "radius": 44000,
+      "gravParameter": 721702080,
+      "sphereOfInfluence": 1042139,
+      "atmosphereHeight": 0,
+      "rotationPeriod": 901902.62,
+      "rotationAngle": 4.698873343959356,
+      "highestTerrainAltitude": 5590,
+      "color": "#c9b45a",
+      "texture": "/art/body/Pol.png"
+    },
+    {
+      "name": "Eeloo",
+      "orbit": {
+        "referenceBody": "Sun",
+        "semiMajorAxis": 90118820000,
+        "eccentricity": 0.26,
+        "inclination": 0.10733774899765128,
+        "longitudeOfAscendingNode": 0.8726646259971648,
+        "argumentOfPeriapsis": 4.537856055185257,
+        "meanAnomaly": 3.14
+      },
+      "radius": 210000,
+      "gravParameter": 74410815000,
+      "sphereOfInfluence": 119082940,
+      "atmosphereHeight": 0,
+      "rotationPeriod": 19460,
+      "rotationAngle": 2.4667798431064654,
+      "highestTerrainAltitude": 3874,
+      "color": "#d9d9d9",
+      "texture": "/art/body/Eeloo.png"
+    }
+  ],
+  "vessels": [
+    {
+      "id": 1101,
+      "registryCode": "FLT-1101-STN",
+      "name": "Kerbin Station Alpha",
+      "vesselType": "station",
+      "location": {
+        "kind": "orbit",
+        "situation": "orbiting",
+        "orbit": {
+          "referenceBody": "Kerbin",
+          "semiMajorAxis": 850000,
+          "eccentricity": 0.002352941176470588,
+          "inclination": 0.008726646259971648,
+          "longitudeOfAscendingNode": 0.5235987755982988,
+          "argumentOfPeriapsis": 0.17453292519943295,
+          "meanAnomaly": 0.4
+        }
+      },
+      "loaded": true,
+      "controllable": true,
+      "comms": "link",
+      "signalStrength": 0.82,
+      "crewCapacity": 6,
+      "crew": [
+        {
+          "name": "Jebediah Kerman",
+          "trait": "Pilot",
+          "level": 5
+        },
+        {
+          "name": "Bill Kerman",
+          "trait": "Engineer",
+          "level": 3
+        },
+        {
+          "name": "Bob Kerman",
+          "trait": "Scientist",
+          "level": 3
+        }
+      ],
+      "resources": [
+        {
+          "name": "ElectricCharge",
+          "amount": 2800,
+          "capacity": 4000
+        },
+        {
+          "name": "MonoPropellant",
+          "amount": 525,
+          "capacity": 750
+        },
+        {
+          "name": "LiquidFuel",
+          "amount": 1260,
+          "capacity": 1800
+        },
+        {
+          "name": "Oxidizer",
+          "amount": 1540,
+          "capacity": 2200
+        },
+        {
+          "name": "Ore",
+          "amount": 1050,
+          "capacity": 1500
+        },
+        {
+          "name": "XenonGas",
+          "amount": 3990,
+          "capacity": 5700
+        }
+      ],
+      "mass": 48200,
+      "deltaV": {
+        "total": 820,
+        "source": "stock",
+        "stages": [
+          {
+            "stage": 0,
+            "deltaV": 820,
+            "twr": 1.2,
+            "burnTime": 89
+          }
+        ]
+      },
+      "attitude": {
+        "x": -0.058866,
+        "y": -0.017672,
+        "z": 0.28698,
+        "w": 0.955963
+      },
+      "docking": {
+        "ports": [
+          {
+            "id": 11011,
+            "name": "Clamp-O-Tron Docking Port",
+            "size": "size1",
+            "free": true
+          },
+          {
+            "id": 11012,
+            "name": "Clamp-O-Tron Docking Port",
+            "size": "size1",
+            "free": true
+          },
+          {
+            "id": 11013,
+            "name": "Clamp-O-Tron Sr. Docking Port",
+            "size": "size2",
+            "free": true
+          }
+        ]
+      },
+      "spaceObject": null
+    },
+    {
+      "id": 1103,
+      "registryCode": "FLT-1103-LDR",
+      "name": "Mun Lander 2",
+      "vesselType": "lander",
+      "location": {
+        "kind": "surface",
+        "situation": "landed",
+        "body": "Mun",
+        "latitude": 0.05585053606381855,
+        "longitude": -0.9023352232810684,
+        "altitude": 1840
+      },
+      "loaded": false,
+      "controllable": true,
+      "comms": "link",
+      "signalStrength": 0.82,
+      "crewCapacity": 2,
+      "crew": [
+        {
+          "name": "Valentina Kerman",
+          "trait": "Pilot",
+          "level": 4
+        }
+      ],
+      "resources": [
+        {
+          "name": "ElectricCharge",
+          "amount": 420,
+          "capacity": 600
+        },
+        {
+          "name": "LiquidFuel",
+          "amount": 252,
+          "capacity": 360
+        },
+        {
+          "name": "Oxidizer",
+          "amount": 308,
+          "capacity": 440
+        },
+        {
+          "name": "MonoPropellant",
+          "amount": 84,
+          "capacity": 120
+        }
+      ],
+      "mass": 6400,
+      "deltaV": {
+        "total": 1210,
+        "source": "estimate",
+        "stages": [
+          {
+            "stage": 0,
+            "deltaV": 1210,
+            "twr": 1.2,
+            "burnTime": 132
+          }
+        ]
+      },
+      "attitude": {
+        "x": 0.161698,
+        "y": 0.26483,
+        "z": 0.81136,
+        "w": 0.495393
+      },
+      "docking": null,
+      "spaceObject": null
+    },
+    {
+      "id": 1105,
+      "registryCode": "FLT-1105-SHP",
+      "name": "Kerbal X",
+      "vesselType": "ship",
+      "location": {
+        "kind": "surface",
+        "situation": "prelaunch",
+        "body": "Kerbin",
+        "latitude": -0.0016964600329384882,
+        "longitude": -1.3012773477141761,
+        "altitude": 67
+      },
+      "loaded": false,
+      "controllable": true,
+      "comms": "link",
+      "signalStrength": 0.82,
+      "crewCapacity": 1,
+      "crew": [
+        {
+          "name": "Wernher Kerman",
+          "trait": "Pilot",
+          "level": 1
+        }
+      ],
+      "resources": [
+        {
+          "name": "ElectricCharge",
+          "amount": 1000,
+          "capacity": 1000
+        },
+        {
+          "name": "LiquidFuel",
+          "amount": 2880,
+          "capacity": 2880
+        },
+        {
+          "name": "Oxidizer",
+          "amount": 3520,
+          "capacity": 3520
+        },
+        {
+          "name": "MonoPropellant",
+          "amount": 200,
+          "capacity": 200
+        },
+        {
+          "name": "SolidFuel",
+          "amount": 820,
+          "capacity": 820
+        }
+      ],
+      "mass": 132600,
+      "deltaV": {
+        "total": 4820,
+        "source": "stock",
+        "stages": [
+          {
+            "stage": 1,
+            "deltaV": 2900,
+            "twr": 1.45,
+            "burnTime": 187
+          },
+          {
+            "stage": 0,
+            "deltaV": 1920,
+            "twr": 0.92,
+            "burnTime": 164
+          }
+        ]
+      },
+      "attitude": {
+        "x": 0.019509,
+        "y": -0.105505,
+        "z": 0.977654,
+        "w": -0.180777
+      },
+      "docking": {
+        "ports": [
+          {
+            "id": 11051,
+            "name": "Clamp-O-Tron Docking Port",
+            "size": "size1",
+            "free": true
+          }
+        ]
+      },
+      "spaceObject": null
+    },
+    {
+      "id": 1201,
+      "registryCode": "FLT-1201-RLY",
+      "name": "Relay R1",
+      "vesselType": "relay",
+      "location": {
+        "kind": "orbit",
+        "situation": "orbiting",
+        "orbit": {
+          "referenceBody": "Kerbin",
+          "semiMajorAxis": 1312500,
+          "eccentricity": 0.017142857142857144,
+          "inclination": 0.003490658503988659,
+          "longitudeOfAscendingNode": 0,
+          "argumentOfPeriapsis": 0,
+          "meanAnomaly": 0.35
+        }
+      },
+      "loaded": false,
+      "controllable": true,
+      "comms": "link",
+      "signalStrength": 0.82,
+      "crewCapacity": 0,
+      "crew": [],
+      "resources": [
+        {
+          "name": "ElectricCharge",
+          "amount": 1200,
+          "capacity": 1200
+        },
+        {
+          "name": "MonoPropellant",
+          "amount": 50,
+          "capacity": 50
+        }
+      ],
+      "mass": 1100,
+      "deltaV": {
+        "total": 620,
+        "source": "estimate",
+        "stages": [
+          {
+            "stage": 0,
+            "deltaV": 620,
+            "twr": 1.2,
+            "burnTime": 67
+          }
+        ]
+      },
+      "attitude": {
+        "x": -0.247869,
+        "y": 0.286445,
+        "z": 0.699838,
+        "w": -0.605588
+      },
+      "docking": null,
+      "spaceObject": null
+    },
+    {
+      "id": 1202,
+      "registryCode": "FLT-1202-RLY",
+      "name": "Relay R2",
+      "vesselType": "relay",
+      "location": {
+        "kind": "orbit",
+        "situation": "orbiting",
+        "orbit": {
+          "referenceBody": "Kerbin",
+          "semiMajorAxis": 1325000,
+          "eccentricity": 0.017358490566037735,
+          "inclination": 0.003490658503988659,
+          "longitudeOfAscendingNode": 0,
+          "argumentOfPeriapsis": 0,
+          "meanAnomaly": 0.9
+        }
+      },
+      "loaded": false,
+      "controllable": true,
+      "comms": "link",
+      "signalStrength": 0.82,
+      "crewCapacity": 0,
+      "crew": [],
+      "resources": [
+        {
+          "name": "ElectricCharge",
+          "amount": 1200,
+          "capacity": 1200
+        },
+        {
+          "name": "MonoPropellant",
+          "amount": 50,
+          "capacity": 50
+        }
+      ],
+      "mass": 1100,
+      "deltaV": {
+        "total": 620,
+        "source": "estimate",
+        "stages": [
+          {
+            "stage": 0,
+            "deltaV": 620,
+            "twr": 1.2,
+            "burnTime": 67
+          }
+        ]
+      },
+      "attitude": {
+        "x": 0.194928,
+        "y": -0.104466,
+        "z": 0.460668,
+        "w": -0.859578
+      },
+      "docking": null,
+      "spaceObject": null
+    },
+    {
+      "id": 1203,
+      "registryCode": "FLT-1203-RLY",
+      "name": "Relay R3",
+      "vesselType": "relay",
+      "location": {
+        "kind": "orbit",
+        "situation": "orbiting",
+        "orbit": {
+          "referenceBody": "Kerbin",
+          "semiMajorAxis": 1327500,
+          "eccentricity": 0.02448210922787194,
+          "inclination": 0.003490658503988659,
+          "longitudeOfAscendingNode": 0,
+          "argumentOfPeriapsis": 0,
+          "meanAnomaly": 1.25
+        }
+      },
+      "loaded": false,
+      "controllable": true,
+      "comms": "link",
+      "signalStrength": 0.82,
+      "crewCapacity": 0,
+      "crew": [],
+      "resources": [
+        {
+          "name": "ElectricCharge",
+          "amount": 1200,
+          "capacity": 1200
+        },
+        {
+          "name": "MonoPropellant",
+          "amount": 50,
+          "capacity": 50
+        }
+      ],
+      "mass": 1100,
+      "deltaV": {
+        "total": 620,
+        "source": "estimate",
+        "stages": [
+          {
+            "stage": 0,
+            "deltaV": 620,
+            "twr": 1.2,
+            "burnTime": 67
+          }
+        ]
+      },
+      "attitude": {
+        "x": 0.034218,
+        "y": -0.004351,
+        "z": 0.12606,
+        "w": -0.991423
+      },
+      "docking": null,
+      "spaceObject": null
+    },
+    {
+      "id": 1204,
+      "registryCode": "FLT-1204-RLY",
+      "name": "Relay R4",
+      "vesselType": "relay",
+      "location": {
+        "kind": "orbit",
+        "situation": "orbiting",
+        "orbit": {
+          "referenceBody": "Kerbin",
+          "semiMajorAxis": 1325000,
+          "eccentricity": 0.012830188679245283,
+          "inclination": 0.003490658503988659,
+          "longitudeOfAscendingNode": 0,
+          "argumentOfPeriapsis": 0,
+          "meanAnomaly": 2.6
+        }
+      },
+      "loaded": false,
+      "controllable": true,
+      "comms": "link",
+      "signalStrength": 0.82,
+      "crewCapacity": 0,
+      "crew": [],
+      "resources": [
+        {
+          "name": "ElectricCharge",
+          "amount": 1200,
+          "capacity": 1200
+        },
+        {
+          "name": "MonoPropellant",
+          "amount": 50,
+          "capacity": 50
+        }
+      ],
+      "mass": 1100,
+      "deltaV": {
+        "total": 620,
+        "source": "estimate",
+        "stages": [
+          {
+            "stage": 0,
+            "deltaV": 620,
+            "twr": 1.2,
+            "burnTime": 67
+          }
+        ]
+      },
+      "attitude": {
+        "x": 0.149031,
+        "y": 0.036317,
+        "z": 0.233957,
+        "w": 0.96007
+      },
+      "docking": null,
+      "spaceObject": null
+    }
+  ],
+  "markers": {
+    "items": [
+      {
+        "id": "site:launchPad",
+        "name": "KSC Launch Pad",
+        "kind": "site",
+        "body": "Kerbin",
+        "latitude": -0.0016919996695020918,
+        "longitude": -1.3012738570556723
+      },
+      {
+        "id": "site:runway",
+        "name": "KSC Runway",
+        "kind": "site",
+        "body": "Kerbin",
+        "latitude": -0.0008620460428280313,
+        "longitude": -1.302166418435142
+      },
+      {
+        "id": "waypoint:5f1c0a2e",
+        "name": "Crater Rim",
+        "kind": "waypoint",
+        "body": "Mun",
+        "latitude": 0.1466076571675237,
+        "longitude": 0.4118977034706618
+      },
+      {
+        "id": "contract:9b7d41c3",
+        "name": "Site Gamma Mun",
+        "kind": "contract",
+        "body": "Mun",
+        "latitude": -0.24783675378319478,
+        "longitude": 1.9634954084936207
+      },
+      {
+        "id": "flag:1190",
+        "name": "First Footprint",
+        "kind": "flag",
+        "body": "Mun",
+        "latitude": 0.011693705988362009,
+        "longitude": -0.6789330790257941
+      },
+      {
+        "id": "vessel:1103",
+        "name": "Mun Lander 2",
+        "kind": "vessel",
+        "body": "Mun",
+        "latitude": 0.05585053606381855,
+        "longitude": -0.9023352232810684
+      }
+    ]
+  }
+}

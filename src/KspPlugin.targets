@@ -1,0 +1,9 @@
+<Project>
+  <Target Name="FLTCOM_RequireGameRoot" BeforeTargets="ResolveAssemblyReferences;KSPBT_CheckForGameRoot">
+    <PropertyGroup>
+      <_FltcomAssemblyCSharp>$(KSPBT_ManagedPath)/Assembly-CSharp.dll</_FltcomAssemblyCSharp>
+    </PropertyGroup>
+    <Error Condition="'$(KSPBT_GameRoot)' == '' And !Exists('$(_FltcomAssemblyCSharp)')" Text="No KSP install found. Set the KSP_ROOT environment variable (or the KSPBT_GameRoot property) to a KSP 1.12.5 folder that contains $(_KSPBT_ManagedRelativePath)/Assembly-CSharp.dll." />
+    <Error Condition="'$(KSPBT_GameRoot)' != '' And !Exists('$(_FltcomAssemblyCSharp)')" Text="KSP_ROOT / KSPBT_GameRoot is set to '$(KSPBT_GameRoot)', but $(_FltcomAssemblyCSharp) does not exist. Point KSP_ROOT at a KSP 1.12.5 folder that contains $(_KSPBT_ManagedRelativePath)/Assembly-CSharp.dll." />
+  </Target>
+</Project>

@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <RootNamespace>FLTCOM.TestHarness</RootNamespace>
+    <AssemblyName>FLTCOM.TestHarness</AssemblyName>
+    <KSPBT_ModRoot>$(MSBuildThisFileDirectory)../../dist-test/GameData/FLTCOM.TestHarness/</KSPBT_ModRoot>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="KSPBuildTools" Version="1.1.1" />
+  </ItemGroup>
+
+  <Import Project="../KspPlugin.targets" />
+</Project>

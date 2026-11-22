@@ -1,0 +1,256 @@
+:root {
+  color-scheme: dark;
+  --bg: #0c0a0a;
+  --fg: #e8e6e3;
+  --dim: #8d8a86;
+  --faint: #5c5856;
+  --alert: #ff4d4d;
+  --rule: #2a2726;
+  --tick: #8d8a86;
+  --role-selected: #39ff88;
+  --role-planned: #ffd84a;
+  --role-operation: #4da3ff;
+  --font-ui: "Share Tech Mono", ui-monospace, monospace;
+  --font-type: "Courier Prime", "Courier New", monospace;
+  --fx-grain: 0;
+  --fx-scan: 0;
+  --fx-vignette: 0;
+  --fx-glow: 0;
+  --fx-split: 0px;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-ui);
+  font-synthesis-weight: none;
+}
+
+body {
+  text-shadow:
+    var(--fx-split) 0 0 rgb(255 255 255 / calc(var(--fx-glow) * 0.12)),
+    calc(var(--fx-split) * -1) 0 0 rgb(0 0 0 / calc(var(--fx-glow) * 0.4)),
+    0 0 calc(var(--fx-glow) * 6px) rgb(230 226 220 / calc(var(--fx-glow) * 0.3));
+}
+
+button {
+  text-shadow: inherit;
+}
+
+.fx {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+}
+
+.fx-scan {
+  background: repeating-linear-gradient(to bottom, rgb(0 0 0 / var(--fx-scan)) 0 1px, transparent 1px 3px);
+}
+
+.fx-vignette {
+  background: radial-gradient(ellipse at center, transparent 55%, rgb(0 0 0 / var(--fx-vignette)) 100%);
+}
+
+.fx-grain {
+  width: 100%;
+  height: 100%;
+  opacity: var(--fx-grain);
+  mix-blend-mode: overlay;
+  image-rendering: pixelated;
+}
+
+/* Panel frame: a faint rule with brighter corner ticks, as on the reference displays. */
+.panel {
+  --t: linear-gradient(var(--tick), var(--tick));
+  --r: linear-gradient(var(--rule), var(--rule));
+  background:
+    var(--t) top left / 10px 1px no-repeat,
+    var(--t) top left / 1px 10px no-repeat,
+    var(--t) top right / 10px 1px no-repeat,
+    var(--t) top right / 1px 10px no-repeat,
+    var(--t) bottom left / 10px 1px no-repeat,
+    var(--t) bottom left / 1px 10px no-repeat,
+    var(--t) bottom right / 10px 1px no-repeat,
+    var(--t) bottom right / 1px 10px no-repeat,
+    var(--r) top / 100% 1px no-repeat,
+    var(--r) bottom / 100% 1px no-repeat,
+    var(--r) left / 1px 100% no-repeat,
+    var(--r) right / 1px 100% no-repeat;
+}
+
+/* Section heading: a bar, then spaced capitals. */
+.heading {
+  margin: 0 0 0.45rem;
+  padding-left: 0.45rem;
+  border-left: 2px solid var(--fg);
+  color: var(--fg);
+  font: 400 0.8rem/1.1 var(--font-ui);
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+}
+
+.typing {
+  animation: type-on var(--type-ms, 200ms) steps(var(--type-steps, 8), end) both;
+}
+
+@keyframes type-on {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* Live controls: glow on hover, give under the finger, pulse on an answer, shake on a refusal. Transforms and opacity only. */
+:where(.ctl) {
+  position: relative;
+}
+
+.ctl {
+  transition: scale 90ms ease-out;
+}
+
+.ctl::after {
+  position: absolute;
+  inset: -1px;
+  content: "";
+  pointer-events: none;
+  box-shadow:
+    0 0 12px 1px currentColor,
+    inset 0 0 8px currentColor;
+  opacity: 0;
+  transition: opacity 140ms ease-out;
+}
+
+.ctl:not(:disabled):hover::after,
+.ctl:focus-visible::after,
+.ctl:has(:focus-visible)::after {
+  opacity: 0.4;
+}
+
+.ctl:not(:disabled):active,
+.ctl[data-holding] {
+  scale: 0.97;
+}
+
+.ctl.hold::before {
+  position: absolute;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+  background: currentColor;
+  opacity: 0.25;
+  transform: scaleX(var(--hold, 0));
+  transform-origin: left;
+}
+
+.ctl.hold {
+  touch-action: none;
+  user-select: none;
+}
+
+.ctl.hold:not([data-holding])::before {
+  transition: transform 160ms ease-out;
+}
+
+.ctl.ctl[data-ack="pending"]::after {
+  animation: ctl-pending 0.8s ease-in-out infinite alternate;
+}
+
+.ctl.ctl[data-ack="ok"] {
+  border-color: var(--role-selected);
+  color: var(--role-selected);
+  animation: ctl-ok 420ms ease-out;
+}
+
+.ctl.ctl[data-ack="ok"]::after {
+  animation: ctl-flash 700ms ease-out;
+}
+
+.ctl.ctl[data-ack="refused"] {
+  border-color: var(--alert);
+  color: var(--alert);
+  animation: ctl-shake 380ms ease-in-out;
+}
+
+.ctl.ctl[data-ack="refused"]::after {
+  opacity: 0.45;
+}
+
+.refusal {
+  margin: 0.25rem 0 0;
+  color: var(--alert);
+  font: 0.7rem/1.3 var(--font-ui);
+  letter-spacing: 0.12em;
+  animation: ctl-in 240ms ease-out;
+}
+
+@keyframes ctl-pending {
+  from {
+    opacity: 0.1;
+  }
+  to {
+    opacity: 0.55;
+  }
+}
+
+@keyframes ctl-ok {
+  40% {
+    scale: 1.06;
+  }
+}
+
+@keyframes ctl-flash {
+  from {
+    opacity: 0.95;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes ctl-shake {
+  20% {
+    translate: -5px 0;
+  }
+  40% {
+    translate: 4px 0;
+  }
+  60% {
+    translate: -3px 0;
+  }
+  80% {
+    translate: 2px 0;
+  }
+}
+
+@keyframes ctl-in {
+  from {
+    opacity: 0;
+    translate: 0 -3px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ctl,
+  .ctl::before,
+  .ctl::after,
+  .refusal {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .ctl:not(:disabled):active,
+  .ctl[data-holding] {
+    scale: none;
+  }
+
+  .ctl.ctl[data-ack="pending"]::after {
+    opacity: 0.4;
+  }
+}

@@ -1,0 +1,2332 @@
+{
+  "protocolVersion": 14,
+  "type": "fleet",
+  "seq": 0,
+  "ut": 5184000,
+  "warpRate": 1,
+  "activeVesselId": 1306,
+  "bodies": [
+    {
+      "name": "Sun",
+      "orbit": null,
+      "radius": 261600000,
+      "gravParameter": 1172332800000000000,
+      "sphereOfInfluence": null,
+      "atmosphereHeight": 600000,
+      "rotationPeriod": 432000,
+      "rotationAngle": 0,
+      "highestTerrainAltitude": 0,
+      "color": "#ffd84a",
+      "texture": null
+    },
+    {
+      "name": "Moho",
+      "orbit": {
+        "referenceBody": "Sun",
+        "semiMajorAxis": 5263138304,
+        "eccentricity": 0.2,
+        "inclination": 0.12217304763960307,
+        "longitudeOfAscendingNode": 1.2217304763960306,
+        "argumentOfPeriapsis": 0.2617993877991494,
+        "meanAnomaly": 3.14
+      },
+      "radius": 250000,
+      "gravParameter": 168609380000,
+      "sphereOfInfluence": 9646663,
+      "atmosphereHeight": 0,
+      "rotationPeriod": 1210000,
+      "rotationAngle": 1.786294004685768,
+      "highestTerrainAltitude": 6817,
+      "color": "#8c6b4f",
+      "texture": "/art/body/Moho.png"
+    },
+    {
+      "name": "Eve",
+      "orbit": {
+        "referenceBody": "Sun",
+        "semiMajorAxis": 9832684544,
+        "eccentricity": 0.01,
+        "inclination": 0.03665191429188092,
+        "longitudeOfAscendingNode": 0.2617993877991494,
+        "argumentOfPeriapsis": 0,
+        "meanAnomaly": 3.14
+      },
+      "radius": 700000,
+      "gravParameter": 8171730200000,
+      "sphereOfInfluence": 85109365,
+      "atmosphereHeight": 90000,
+      "rotationPeriod": 80500,
+      "rotationAngle": 2.49766372459311,
+      "highestTerrainAltitude": 7526,
+      "color": "#8a4fc9",
+      "texture": "/art/body/Eve.png"
+    },
+    {
+      "name": "Gilly",
+      "orbit": {
+        "referenceBody": "Eve",
+        "semiMajorAxis": 31500000,
+        "eccentricity": 0.55,
+        "inclination": 0.20943951023931956,
+        "longitudeOfAscendingNode": 1.3962634015954636,
+        "argumentOfPeriapsis": 0.17453292519943295,
+        "meanAnomaly": 0.9
+      },
+      "radius": 13000,
+      "gravParameter": 8289449.8,
+      "sphereOfInfluence": 126123,
+      "atmosphereHeight": 0,
+      "rotationPeriod": 28255,
+      "rotationAngle": 2.9653610359666445,
+      "highestTerrainAltitude": 6401,
+      "color": "#a08f7a",
+      "texture": "/art/body/Gilly.png"
+    },
+    {
+      "name": "Kerbin",
+      "orbit": {
+        "referenceBody": "Sun",
+        "semiMajorAxis": 13599840256,
+        "eccentricity": 0,
+        "inclination": 0,
+        "longitudeOfAscendingNode": 0,
+        "argumentOfPeriapsis": 0,
+        "meanAnomaly": 3.14
+      },
+      "radius": 600000,
+      "gravParameter": 3531600000000,
+      "sphereOfInfluence": 84159286,
+      "atmosphereHeight": 70000,
+      "rotationPeriod": 21549.425,
+      "rotationAngle": 3.5390876210639135,
+      "highestTerrainAltitude": 6767,
+      "color": "#4f8fd6",
+      "texture": "/art/body/Kerbin.png"
+    },
+    {
+      "name": "Mun",
+      "orbit": {
+        "referenceBody": "Kerbin",
+        "semiMajorAxis": 12000000,
+        "eccentricity": 0,
+        "inclination": 0,
+        "longitudeOfAscendingNode": 0,
+        "argumentOfPeriapsis": 0,
+        "meanAnomaly": 1.7
+      },
+      "radius": 200000,
+      "gravParameter": 65138398000,
+      "sphereOfInfluence": 2429559,
+      "atmosphereHeight": 0,
+      "rotationPeriod": 138984.38,
+      "rotationAngle": 1.8796493657114084,
+      "highestTerrainAltitude": 7061,
+      "color": "#9a9a9a",
+      "texture": "/art/body/Mun.png"
+    },
+    {
+      "name": "Minmus",
+      "orbit": {
+        "referenceBody": "Kerbin",
+        "semiMajorAxis": 47000000,
+        "eccentricity": 0,
+        "inclination": 0.10471975511965978,
+        "longitudeOfAscendingNode": 1.361356816555577,
+        "argumentOfPeriapsis": 0.6632251157578453,
+        "meanAnomaly": 0.9
+      },
+      "radius": 60000,
+      "gravParameter": 1765800000,
+      "sphereOfInfluence": 2247428,
+      "atmosphereHeight": 0,
+      "rotationPeriod": 40400,
+      "rotationAngle": 1.9907121765321563,
+      "highestTerrainAltitude": 5725,
+      "color": "#9fe0c8",
+      "texture": "/art/body/Minmus.png"
+    },
+    {
+      "name": "Duna",
+      "orbit": {
+        "referenceBody": "Sun",
+        "semiMajorAxis": 20726155264,
+        "eccentricity": 0.051,
+        "inclination": 0.0010471975511965976,
+        "longitudeOfAscendingNode": 2.3649211364523164,
+        "argumentOfPeriapsis": 0,
+        "meanAnomaly": 3.14
+      },
+      "radius": 320000,
+      "gravParameter": 301363210000,
+      "sphereOfInfluence": 47921949,
+      "atmosphereHeight": 50000,
+      "rotationPeriod": 65517.859,
+      "rotationAngle": 0.775751223991243,
+      "highestTerrainAltitude": 8264,
+      "color": "#c4553a",
+      "texture": "/art/body/Duna.png"
+    },
+    {
+      "name": "Ike",
+      "orbit": {
+        "referenceBody": "Duna",
+        "semiMajorAxis": 3200000,
+        "eccentricity": 0.03,
+        "inclination": 0.003490658503988659,
+        "longitudeOfAscendingNode": 0,
+        "argumentOfPeriapsis": 0,
+        "meanAnomaly": 1.7
+      },
+      "radius": 130000,
+      "gravParameter": 18568369000,
+      "sphereOfInfluence": 1049599,
+      "atmosphereHeight": 0,
+      "rotationPeriod": 65517.862,
+      "rotationAngle": 0.7757284600894749,
+      "highestTerrainAltitude": 12738,
+      "color": "#7d7d7d",
+      "texture": "/art/body/Ike.png"
+    },
+    {
+      "name": "Dres",
+      "orbit": {
+        "referenceBody": "Sun",
+        "semiMajorAxis": 40839348203,
+        "eccentricity": 0.145,
+        "inclination": 0.08726646259971647,
+        "longitudeOfAscendingNode": 4.886921905584122,
+        "argumentOfPeriapsis": 1.5707963267948966,
+        "meanAnomaly": 3.14
+      },
+      "radius": 138000,
+      "gravParameter": 21484489000,
+      "sphereOfInfluence": 32832840,
+      "atmosphereHeight": 0,
+      "rotationPeriod": 34800,
+      "rotationAngle": 6.066523744863076,
+      "highestTerrainAltitude": 5700,
+      "color": "#9b8f86",
+      "texture": "/art/body/Dres.png"
+    },
+    {
+      "name": "Jool",
+      "orbit": {
+        "referenceBody": "Sun",
+        "semiMajorAxis": 68773560320,
+        "eccentricity": 0.05,
+        "inclination": 0.02275909344600606,
+        "longitudeOfAscendingNode": 0.9075712110370514,
+        "argumentOfPeriapsis": 0,
+        "meanAnomaly": 0.1
+      },
+      "radius": 6000000,
+      "gravParameter": 282528000000000,
+      "sphereOfInfluence": 2455985200,
+      "atmosphereHeight": 200000,
+      "rotationPeriod": 36000,
+      "rotationAngle": 0,
+      "highestTerrainAltitude": 0,
+      "color": "#6fbf3a",
+      "texture": "/art/body/Jool.png"
+    },
+    {
+      "name": "Laythe",
+      "orbit": {
+        "referenceBody": "Jool",
+        "semiMajorAxis": 27184000,
+        "eccentricity": 0,
+        "inclination": 0,
+        "longitudeOfAscendingNode": 0,
+        "argumentOfPeriapsis": 0,
+        "meanAnomaly": 3.14
+      },
+      "radius": 500000,
+      "gravParameter": 1962000000000,
+      "sphereOfInfluence": 3723646,
+      "atmosphereHeight": 50000,
+      "rotationPeriod": 52980.879,
+      "rotationAngle": 5.319478079550301,
+      "highestTerrainAltitude": 6079,
+      "color": "#3d5fa8",
+      "texture": "/art/body/Laythe.png"
+    },
+    {
+      "name": "Vall",
+      "orbit": {
+        "referenceBody": "Jool",
+        "semiMajorAxis": 43152000,
+        "eccentricity": 0,
+        "inclination": 0,
+        "longitudeOfAscendingNode": 0,
+        "argumentOfPeriapsis": 0,
+        "meanAnomaly": 0.9
+      },
+      "radius": 300000,
+      "gravParameter": 207481500000,
+      "sphereOfInfluence": 2406401,
+      "atmosphereHeight": 0,
+      "rotationPeriod": 105962.09,
+      "rotationAngle": 5.800368566994223,
+      "highestTerrainAltitude": 7985,
+      "color": "#a6c6d9",
+      "texture": "/art/body/Vall.png"
+    },
+    {
+      "name": "Tylo",
+      "orbit": {
+        "referenceBody": "Jool",
+        "semiMajorAxis": 68500000,
+        "eccentricity": 0,
+        "inclination": 0.0004363323129985824,
+        "longitudeOfAscendingNode": 0,
+        "argumentOfPeriapsis": 0,
+        "meanAnomaly": 3.14
+      },
+      "radius": 600000,
+      "gravParameter": 2825280000000,
+      "sphereOfInfluence": 10856518,
+      "atmosphereHeight": 0,
+      "rotationPeriod": 211926.36,
+      "rotationAngle": 2.8986032689550143,
+      "highestTerrainAltitude": 11290,
+      "color": "#d8c8b0",
+      "texture": "/art/body/Tylo.png"
+    },
+    {
+      "name": "Bop",
+      "orbit": {
+        "referenceBody": "Jool",
+        "semiMajorAxis": 128500000,
+        "eccentricity": 0.235,
+        "inclination": 0.2617993877991494,
+        "longitudeOfAscendingNode": 0.17453292519943295,
+        "argumentOfPeriapsis": 0.4363323129985824,
+        "meanAnomaly": 0.9
+      },
+      "radius": 65000,
+      "gravParameter": 2486834900,
+      "sphereOfInfluence": 1221061,
+      "atmosphereHeight": 0,
+      "rotationPeriod": 544507.43,
+      "rotationAngle": 3.2705942653232825,
+      "highestTerrainAltitude": 21757,
+      "color": "#8a7458",
+      "texture": "/art/body/Bop.png"
+    },
+    {
+      "name": "Pol",
+      "orbit": {
+        "referenceBody": "Jool",
+        "semiMajorAxis": 179890000,
+        "eccentricity": 0.171,
+        "inclination": 0.07417649320975901,
+        "longitudeOfAscendingNode": 0.03490658503988659,
+        "argumentOfPeriapsis": 0.2617993877991494,
+        "meanAnomaly": 0.9
+      },
+      "radius": 44000,
+      "gravParameter": 721702080,
+      "sphereOfInfluence": 1042139,
+      "atmosphereHeight": 0,
+      "rotationPeriod": 901902.62,
+      "rotationAngle": 4.698873343959356,
+      "highestTerrainAltitude": 5590,
+      "color": "#c9b45a",
+      "texture": "/art/body/Pol.png"
+    },
+    {
+      "name": "Eeloo",
+      "orbit": {
+        "referenceBody": "Sun",
+        "semiMajorAxis": 90118820000,
+        "eccentricity": 0.26,
+        "inclination": 0.10733774899765128,
+        "longitudeOfAscendingNode": 0.8726646259971648,
+        "argumentOfPeriapsis": 4.537856055185257,
+        "meanAnomaly": 3.14
+      },
+      "radius": 210000,
+      "gravParameter": 74410815000,
+      "sphereOfInfluence": 119082940,
+      "atmosphereHeight": 0,
+      "rotationPeriod": 19460,
+      "rotationAngle": 2.4667798431064654,
+      "highestTerrainAltitude": 3874,
+      "color": "#d9d9d9",
+      "texture": "/art/body/Eeloo.png"
+    }
+  ],
+  "vessels": [
+    {
+      "id": 1101,
+      "registryCode": "FLT-1101-STN",
+      "name": "Kerbin Station Alpha",
+      "vesselType": "station",
+      "location": {
+        "kind": "orbit",
+        "situation": "orbiting",
+        "orbit": {
+          "referenceBody": "Kerbin",
+          "semiMajorAxis": 850000,
+          "eccentricity": 0.002352941176470588,
+          "inclination": 0.008726646259971648,
+          "longitudeOfAscendingNode": 0.5235987755982988,
+          "argumentOfPeriapsis": 0.17453292519943295,
+          "meanAnomaly": 0.4
+        }
+      },
+      "loaded": true,
+      "controllable": true,
+      "comms": "link",
+      "signalStrength": 0.82,
+      "crewCapacity": 6,
+      "crew": [
+        {
+          "name": "Jebediah Kerman",
+          "trait": "Pilot",
+          "level": 5
+        },
+        {
+          "name": "Bill Kerman",
+          "trait": "Engineer",
+          "level": 3
+        },
+        {
+          "name": "Bob Kerman",
+          "trait": "Scientist",
+          "level": 3
+        }
+      ],
+      "resources": [
+        {
+          "name": "ElectricCharge",
+          "amount": 2800,
+          "capacity": 4000
+        },
+        {
+          "name": "MonoPropellant",
+          "amount": 525,
+          "capacity": 750
+        },
+        {
+          "name": "LiquidFuel",
+          "amount": 1260,
+          "capacity": 1800
+        },
+        {
+          "name": "Oxidizer",
+          "amount": 1540,
+          "capacity": 2200
+        },
+        {
+          "name": "Ore",
+          "amount": 1050,
+          "capacity": 1500
+        },
+        {
+          "name": "XenonGas",
+          "amount": 3990,
+          "capacity": 5700
+        }
+      ],
+      "mass": 48200,
+      "deltaV": {
+        "total": 820,
+        "source": "stock",
+        "stages": [
+          {
+            "stage": 0,
+            "deltaV": 820,
+            "twr": 1.2,
+            "burnTime": 89
+          }
+        ]
+      },
+      "attitude": {
+        "x": -0.058866,
+        "y": -0.017672,
+        "z": 0.28698,
+        "w": 0.955963
+      },
+      "docking": {
+        "ports": [
+          {
+            "id": 11011,
+            "name": "Clamp-O-Tron Docking Port",
+            "size": "size1",
+            "free": true
+          },
+          {
+            "id": 11012,
+            "name": "Clamp-O-Tron Docking Port",
+            "size": "size1",
+            "free": true
+          },
+          {
+            "id": 11013,
+            "name": "Clamp-O-Tron Sr. Docking Port",
+            "size": "size2",
+            "free": true
+          }
+        ]
+      },
+      "spaceObject": null
+    },
+    {
+      "id": 1102,
+      "registryCode": "FLT-1102-RLY",
+      "name": "Comsat K1",
+      "vesselType": "relay",
+      "location": {
+        "kind": "orbit",
+        "situation": "orbiting",
+        "orbit": {
+          "referenceBody": "Kerbin",
+          "semiMajorAxis": 3463500,
+          "eccentricity": 0.00014436263894903998,
+          "inclination": 0,
+          "longitudeOfAscendingNode": 0,
+          "argumentOfPeriapsis": 0,
+          "meanAnomaly": 2.1
+        }
+      },
+      "loaded": false,
+      "controllable": true,
+      "comms": "link",
+      "signalStrength": 0.82,
+      "crewCapacity": 0,
+      "crew": [],
+      "resources": [
+        {
+          "name": "ElectricCharge",
+          "amount": 840,
+          "capacity": 1200
+        },
+        {
+          "name": "MonoPropellant",
+          "amount": 35,
+          "capacity": 50
+        }
+      ],
+      "mass": 1250,
+      "deltaV": {
+        "total": 410,
+        "source": "estimate",
+        "stages": [
+          {
+            "stage": 0,
+            "deltaV": 410,
+            "twr": 1.2,
+            "burnTime": 45
+          }
+        ]
+      },
+      "attitude": {
+        "x": 0.100281,
+        "y": 0.07737,
+        "z": 0.605936,
+        "w": 0.785366
+      },
+      "docking": null,
+      "spaceObject": null
+    },
+    {
+      "id": 1103,
+      "registryCode": "FLT-1103-LDR",
+      "name": "Mun Lander 2",
+      "vesselType": "lander",
+      "location": {
+        "kind": "surface",
+        "situation": "landed",
+        "body": "Mun",
+        "latitude": 0.05585053606381855,
+        "longitude": -0.9023352232810684,
+        "altitude": 1840
+      },
+      "loaded": false,
+      "controllable": true,
+      "comms": "link",
+      "signalStrength": 0.82,
+      "crewCapacity": 2,
+      "crew": [
+        {
+          "name": "Valentina Kerman",
+          "trait": "Pilot",
+          "level": 4
+        }
+      ],
+      "resources": [
+        {
+          "name": "ElectricCharge",
+          "amount": 420,
+          "capacity": 600
+        },
+        {
+          "name": "LiquidFuel",
+          "amount": 252,
+          "capacity": 360
+        },
+        {
+          "name": "Oxidizer",
+          "amount": 308,
+          "capacity": 440
+        },
+        {
+          "name": "MonoPropellant",
+          "amount": 84,
+          "capacity": 120
+        }
+      ],
+      "mass": 6400,
+      "deltaV": {
+        "total": 1210,
+        "source": "estimate",
+        "stages": [
+          {
+            "stage": 0,
+            "deltaV": 1210,
+            "twr": 1.2,
+            "burnTime": 132
+          }
+        ]
+      },
+      "attitude": {
+        "x": 0.161698,
+        "y": 0.26483,
+        "z": 0.81136,
+        "w": 0.495393
+      },
+      "docking": null,
+      "spaceObject": null
+    },
+    {
+      "id": 1104,
+      "registryCode": "FLT-1104-PRB",
+      "name": "Minmus Prospector",
+      "vesselType": "probe",
+      "location": {
+        "kind": "orbit",
+        "situation": "orbiting",
+        "orbit": {
+          "referenceBody": "Minmus",
+          "semiMajorAxis": 90000,
+          "eccentricity": 0.011111111111111112,
+          "inclination": 0.06981317007977318,
+          "longitudeOfAscendingNode": 2.0943951023931953,
+          "argumentOfPeriapsis": 0.7853981633974483,
+          "meanAnomaly": 5.2
+        }
+      },
+      "loaded": false,
+      "controllable": true,
+      "comms": "link",
+      "signalStrength": 0.82,
+      "crewCapacity": 0,
+      "crew": [],
+      "resources": [
+        {
+          "name": "ElectricCharge",
+          "amount": 210,
+          "capacity": 300
+        },
+        {
+          "name": "MonoPropellant",
+          "amount": 21,
+          "capacity": 30
+        },
+        {
+          "name": "XenonGas",
+          "amount": 504,
+          "capacity": 720
+        }
+      ],
+      "mass": 980,
+      "deltaV": {
+        "total": 640,
+        "source": "estimate",
+        "stages": [
+          {
+            "stage": 0,
+            "deltaV": 640,
+            "twr": 1.2,
+            "burnTime": 70
+          }
+        ]
+      },
+      "attitude": {
+        "x": -0.052984,
+        "y": -0.286844,
+        "z": 0.940599,
+        "w": 0.173743
+      },
+      "docking": null,
+      "spaceObject": null
+    },
+    {
+      "id": 1105,
+      "registryCode": "FLT-1105-SHP",
+      "name": "Kerbal X",
+      "vesselType": "ship",
+      "location": {
+        "kind": "surface",
+        "situation": "prelaunch",
+        "body": "Kerbin",
+        "latitude": -0.0016964600329384882,
+        "longitude": -1.3012773477141761,
+        "altitude": 67
+      },
+      "loaded": false,
+      "controllable": true,
+      "comms": "link",
+      "signalStrength": 0.82,
+      "crewCapacity": 1,
+      "crew": [
+        {
+          "name": "Wernher Kerman",
+          "trait": "Pilot",
+          "level": 1
+        }
+      ],
+      "resources": [
+        {
+          "name": "ElectricCharge",
+          "amount": 1000,
+          "capacity": 1000
+        },
+        {
+          "name": "LiquidFuel",
+          "amount": 2880,
+          "capacity": 2880
+        },
+        {
+          "name": "Oxidizer",
+          "amount": 3520,
+          "capacity": 3520
+        },
+        {
+          "name": "MonoPropellant",
+          "amount": 200,
+          "capacity": 200
+        },
+        {
+          "name": "SolidFuel",
+          "amount": 820,
+          "capacity": 820
+        }
+      ],
+      "mass": 132600,
+      "deltaV": {
+        "total": 4820,
+        "source": "stock",
+        "stages": [
+          {
+            "stage": 1,
+            "deltaV": 2900,
+            "twr": 1.45,
+            "burnTime": 187
+          },
+          {
+            "stage": 0,
+            "deltaV": 1920,
+            "twr": 0.92,
+            "burnTime": 164
+          }
+        ]
+      },
+      "attitude": {
+        "x": 0.019509,
+        "y": -0.105505,
+        "z": 0.977654,
+        "w": -0.180777
+      },
+      "docking": {
+        "ports": [
+          {
+            "id": 11051,
+            "name": "Clamp-O-Tron Docking Port",
+            "size": "size1",
+            "free": true
+          }
+        ]
+      },
+      "spaceObject": null
+    },
+    {
+      "id": 1107,
+      "registryCode": "FLT-1107-PRB",
+      "name": "Mun Survey",
+      "vesselType": "probe",
+      "location": {
+        "kind": "orbit",
+        "situation": "orbiting",
+        "orbit": {
+          "referenceBody": "Mun",
+          "semiMajorAxis": 265000,
+          "eccentricity": 0.09433962264150944,
+          "inclination": 1.4835298641951802,
+          "longitudeOfAscendingNode": 0.2617993877991494,
+          "argumentOfPeriapsis": 3.490658503988659,
+          "meanAnomaly": 0.3
+        }
+      },
+      "loaded": false,
+      "controllable": true,
+      "comms": "link",
+      "signalStrength": 0.82,
+      "crewCapacity": 0,
+      "crew": [],
+      "resources": [
+        {
+          "name": "ElectricCharge",
+          "amount": 210,
+          "capacity": 300
+        },
+        {
+          "name": "MonoPropellant",
+          "amount": 21,
+          "capacity": 30
+        },
+        {
+          "name": "XenonGas",
+          "amount": 504,
+          "capacity": 720
+        }
+      ],
+      "mass": 720,
+      "deltaV": {
+        "total": 380,
+        "source": "estimate",
+        "stages": [
+          {
+            "stage": 0,
+            "deltaV": 380,
+            "twr": 1.2,
+            "burnTime": 41
+          }
+        ]
+      },
+      "attitude": {
+        "x": -0.210832,
+        "y": 0.1626,
+        "z": 0.588662,
+        "w": -0.763274
+      },
+      "docking": null,
+      "spaceObject": null
+    },
+    {
+      "id": 1301,
+      "registryCode": "FLT-1301-SHP",
+      "name": "Kerbin Tanker",
+      "vesselType": "ship",
+      "location": {
+        "kind": "orbit",
+        "situation": "orbiting",
+        "orbit": {
+          "referenceBody": "Kerbin",
+          "semiMajorAxis": 785000,
+          "eccentricity": 0.006369426751592357,
+          "inclination": 0.003490658503988659,
+          "longitudeOfAscendingNode": 4.485496177625427,
+          "argumentOfPeriapsis": 3.368485456349056,
+          "meanAnomaly": 0.9
+        }
+      },
+      "loaded": false,
+      "controllable": true,
+      "comms": "link",
+      "signalStrength": 0.82,
+      "crewCapacity": 0,
+      "crew": [],
+      "resources": [
+        {
+          "name": "ElectricCharge",
+          "amount": 700,
+          "capacity": 1000
+        },
+        {
+          "name": "LiquidFuel",
+          "amount": 2016,
+          "capacity": 2880
+        },
+        {
+          "name": "Oxidizer",
+          "amount": 2464,
+          "capacity": 3520
+        },
+        {
+          "name": "MonoPropellant",
+          "amount": 140,
+          "capacity": 200
+        },
+        {
+          "name": "SolidFuel",
+          "amount": 574,
+          "capacity": 820
+        }
+      ],
+      "mass": 4200,
+      "deltaV": {
+        "total": 900,
+        "source": "estimate",
+        "stages": [
+          {
+            "stage": 0,
+            "deltaV": 900,
+            "twr": 1.2,
+            "burnTime": 98
+          }
+        ]
+      },
+      "attitude": {
+        "x": 0.016248,
+        "y": 0.034893,
+        "z": 0.905866,
+        "w": 0.421811
+      },
+      "docking": {
+        "ports": [
+          {
+            "id": 13011,
+            "name": "Clamp-O-Tron Docking Port",
+            "size": "size1",
+            "free": true
+          }
+        ]
+      },
+      "spaceObject": null
+    },
+    {
+      "id": 1302,
+      "registryCode": "FLT-1302-RLY",
+      "name": "Comsat K2",
+      "vesselType": "relay",
+      "location": {
+        "kind": "orbit",
+        "situation": "orbiting",
+        "orbit": {
+          "referenceBody": "Kerbin",
+          "semiMajorAxis": 3463000,
+          "eccentricity": 0.0008663008951775916,
+          "inclination": 0,
+          "longitudeOfAscendingNode": 5.1312680008633285,
+          "argumentOfPeriapsis": 4.293509959906051,
+          "meanAnomaly": 4.2
+        }
+      },
+      "loaded": false,
+      "controllable": true,
+      "comms": "link",
+      "signalStrength": 0.82,
+      "crewCapacity": 0,
+      "crew": [],
+      "resources": [
+        {
+          "name": "ElectricCharge",
+          "amount": 840,
+          "capacity": 1200
+        },
+        {
+          "name": "MonoPropellant",
+          "amount": 35,
+          "capacity": 50
+        }
+      ],
+      "mass": 4200,
+      "deltaV": {
+        "total": 900,
+        "source": "estimate",
+        "stages": [
+          {
+            "stage": 0,
+            "deltaV": 900,
+            "twr": 1.2,
+            "burnTime": 98
+          }
+        ]
+      },
+      "attitude": {
+        "x": 0.015805,
+        "y": 0.2245,
+        "z": 0.97194,
+        "w": 0.068427
+      },
+      "docking": null,
+      "spaceObject": null
+    },
+    {
+      "id": 1303,
+      "registryCode": "FLT-1303-RLY",
+      "name": "Comsat K3",
+      "vesselType": "relay",
+      "location": {
+        "kind": "orbit",
+        "situation": "orbiting",
+        "orbit": {
+          "referenceBody": "Kerbin",
+          "semiMajorAxis": 3463000,
+          "eccentricity": 0.0005775339301183945,
+          "inclination": 0,
+          "longitudeOfAscendingNode": 5.777039824101231,
+          "argumentOfPeriapsis": 5.218534463463046,
+          "meanAnomaly": 0.1
+        }
+      },
+      "loaded": false,
+      "controllable": true,
+      "comms": "link",
+      "signalStrength": 0.82,
+      "crewCapacity": 0,
+      "crew": [],
+      "resources": [
+        {
+          "name": "ElectricCharge",
+          "amount": 840,
+          "capacity": 1200
+        },
+        {
+          "name": "MonoPropellant",
+          "amount": 35,
+          "capacity": 50
+        }
+      ],
+      "mass": 4200,
+      "deltaV": {
+        "total": 900,
+        "source": "estimate",
+        "stages": [
+          {
+            "stage": 0,
+            "deltaV": 900,
+            "twr": 1.2,
+            "burnTime": 98
+          }
+        ]
+      },
+      "attitude": {
+        "x": 0.109132,
+        "y": -0.358869,
+        "z": 0.886885,
+        "w": -0.269701
+      },
+      "docking": null,
+      "spaceObject": null
+    },
+    {
+      "id": 1304,
+      "registryCode": "FLT-1304-PRB",
+      "name": "Polar Scanner",
+      "vesselType": "probe",
+      "location": {
+        "kind": "orbit",
+        "situation": "orbiting",
+        "orbit": {
+          "referenceBody": "Kerbin",
+          "semiMajorAxis": 910000,
+          "eccentricity": 0.01098901098901099,
+          "inclination": 1.53588974175501,
+          "longitudeOfAscendingNode": 0.13962634015954636,
+          "argumentOfPeriapsis": 6.14355896702004,
+          "meanAnomaly": 2.7
+        }
+      },
+      "loaded": false,
+      "controllable": true,
+      "comms": "link",
+      "signalStrength": 0.82,
+      "crewCapacity": 0,
+      "crew": [],
+      "resources": [
+        {
+          "name": "ElectricCharge",
+          "amount": 210,
+          "capacity": 300
+        },
+        {
+          "name": "MonoPropellant",
+          "amount": 21,
+          "capacity": 30
+        },
+        {
+          "name": "XenonGas",
+          "amount": 504,
+          "capacity": 720
+        }
+      ],
+      "mass": 4200,
+      "deltaV": {
+        "total": 900,
+        "source": "estimate",
+        "stages": [
+          {
+            "stage": 0,
+            "deltaV": 900,
+            "twr": 1.2,
+            "burnTime": 98
+          }
+        ]
+      },
+      "attitude": {
+        "x": 0.119513,
+        "y": -0.153764,
+        "z": 0.774438,
+        "w": -0.60193
+      },
+      "docking": null,
+      "spaceObject": null
+    },
+    {
+      "id": 1305,
+      "registryCode": "FLT-1305-SHP",
+      "name": "Crew Shuttle",
+      "vesselType": "ship",
+      "location": {
+        "kind": "orbit",
+        "situation": "orbiting",
+        "orbit": {
+          "referenceBody": "Kerbin",
+          "semiMajorAxis": 702500,
+          "eccentricity": 0.010676156583629894,
+          "inclination": 0.006981317007977318,
+          "longitudeOfAscendingNode": 0.7853981633974483,
+          "argumentOfPeriapsis": 0.7853981633974483,
+          "meanAnomaly": 5.6
+        }
+      },
+      "loaded": false,
+      "controllable": true,
+      "comms": "link",
+      "signalStrength": 0.82,
+      "crewCapacity": 0,
+      "crew": [],
+      "resources": [
+        {
+          "name": "ElectricCharge",
+          "amount": 700,
+          "capacity": 1000
+        },
+        {
+          "name": "LiquidFuel",
+          "amount": 2016,
+          "capacity": 2880
+        },
+        {
+          "name": "Oxidizer",
+          "amount": 2464,
+          "capacity": 3520
+        },
+        {
+          "name": "MonoPropellant",
+          "amount": 140,
+          "capacity": 200
+        },
+        {
+          "name": "SolidFuel",
+          "amount": 574,
+          "capacity": 820
+        }
+      ],
+      "mass": 4200,
+      "deltaV": {
+        "total": 900,
+        "source": "estimate",
+        "stages": [
+          {
+            "stage": 0,
+            "deltaV": 900,
+            "twr": 1.2,
+            "burnTime": 98
+          }
+        ]
+      },
+      "attitude": {
+        "x": 0.006415,
+        "y": -0.003885,
+        "z": 0.518047,
+        "w": -0.855319
+      },
+      "docking": {
+        "ports": [
+          {
+            "id": 13051,
+            "name": "Clamp-O-Tron Docking Port",
+            "size": "size1",
+            "free": true
+          }
+        ]
+      },
+      "spaceObject": null
+    },
+    {
+      "id": 1306,
+      "registryCode": "FLT-1306-LDR",
+      "name": "Mun Lander 1",
+      "vesselType": "lander",
+      "location": {
+        "kind": "orbit",
+        "situation": "orbiting",
+        "orbit": {
+          "referenceBody": "Mun",
+          "semiMajorAxis": 215000,
+          "eccentricity": 0.004651162790697674,
+          "inclination": 0.03490658503988659,
+          "longitudeOfAscendingNode": 0,
+          "argumentOfPeriapsis": 0,
+          "meanAnomaly": 1.7
+        }
+      },
+      "loaded": false,
+      "controllable": true,
+      "comms": "link",
+      "signalStrength": 0.82,
+      "crewCapacity": 2,
+      "crew": [
+        {
+          "name": "Lodan Kerman",
+          "trait": "Pilot",
+          "level": 2
+        }
+      ],
+      "resources": [
+        {
+          "name": "ElectricCharge",
+          "amount": 420,
+          "capacity": 600
+        },
+        {
+          "name": "LiquidFuel",
+          "amount": 252,
+          "capacity": 360
+        },
+        {
+          "name": "Oxidizer",
+          "amount": 308,
+          "capacity": 440
+        },
+        {
+          "name": "MonoPropellant",
+          "amount": 84,
+          "capacity": 120
+        }
+      ],
+      "mass": 5100,
+      "deltaV": {
+        "total": 1430,
+        "source": "estimate",
+        "stages": [
+          {
+            "stage": 0,
+            "deltaV": 1430,
+            "twr": 1.2,
+            "burnTime": 155
+          }
+        ]
+      },
+      "attitude": {
+        "x": -0.177134,
+        "y": 0.032065,
+        "z": 0.175218,
+        "w": -0.967933
+      },
+      "docking": null,
+      "spaceObject": null
+    },
+    {
+      "id": 1311,
+      "registryCode": "FLT-1311-RLY",
+      "name": "Laythe Relay",
+      "vesselType": "relay",
+      "location": {
+        "kind": "orbit",
+        "situation": "orbiting",
+        "orbit": {
+          "referenceBody": "Laythe",
+          "semiMajorAxis": 1110000,
+          "eccentricity": 0.009009009009009009,
+          "inclination": 0,
+          "longitudeOfAscendingNode": 4.6600291028248595,
+          "argumentOfPeriapsis": 0.05235987755982989,
+          "meanAnomaly": 1.2
+        }
+      },
+      "loaded": false,
+      "controllable": true,
+      "comms": "link",
+      "signalStrength": 0.82,
+      "crewCapacity": 0,
+      "crew": [],
+      "resources": [
+        {
+          "name": "ElectricCharge",
+          "amount": 840,
+          "capacity": 1200
+        },
+        {
+          "name": "MonoPropellant",
+          "amount": 35,
+          "capacity": 50
+        }
+      ],
+      "mass": 4200,
+      "deltaV": {
+        "total": 900,
+        "source": "estimate",
+        "stages": [
+          {
+            "stage": 0,
+            "deltaV": 900,
+            "twr": 1.2,
+            "burnTime": 98
+          }
+        ]
+      },
+      "attitude": {
+        "x": -0.02465,
+        "y": 0.31693,
+        "z": 0.945274,
+        "w": -0.07352
+      },
+      "docking": null,
+      "spaceObject": null
+    },
+    {
+      "id": 1312,
+      "registryCode": "FLT-1312-PRB",
+      "name": "Vall Survey",
+      "vesselType": "probe",
+      "location": {
+        "kind": "orbit",
+        "situation": "orbiting",
+        "orbit": {
+          "referenceBody": "Vall",
+          "semiMajorAxis": 415000,
+          "eccentricity": 0.060240963855421686,
+          "inclination": 0.5235987755982988,
+          "longitudeOfAscendingNode": 5.305800926062762,
+          "argumentOfPeriapsis": 0.9773843811168246,
+          "meanAnomaly": 3.3
+        }
+      },
+      "loaded": false,
+      "controllable": true,
+      "comms": "link",
+      "signalStrength": 0.82,
+      "crewCapacity": 0,
+      "crew": [],
+      "resources": [
+        {
+          "name": "ElectricCharge",
+          "amount": 210,
+          "capacity": 300
+        },
+        {
+          "name": "MonoPropellant",
+          "amount": 21,
+          "capacity": 30
+        },
+        {
+          "name": "XenonGas",
+          "amount": 504,
+          "capacity": 720
+        }
+      ],
+      "mass": 4200,
+      "deltaV": {
+        "total": 900,
+        "source": "estimate",
+        "stages": [
+          {
+            "stage": 0,
+            "deltaV": 900,
+            "twr": 1.2,
+            "burnTime": 98
+          }
+        ]
+      },
+      "attitude": {
+        "x": 0.121783,
+        "y": -0.256603,
+        "z": 0.86621,
+        "w": -0.411102
+      },
+      "docking": null,
+      "spaceObject": null
+    },
+    {
+      "id": 1313,
+      "registryCode": "FLT-1313-LDR",
+      "name": "Tylo Lander",
+      "vesselType": "lander",
+      "location": {
+        "kind": "orbit",
+        "situation": "orbiting",
+        "orbit": {
+          "referenceBody": "Tylo",
+          "semiMajorAxis": 622500,
+          "eccentricity": 0.004016064257028112,
+          "inclination": 0,
+          "longitudeOfAscendingNode": 5.951572749300664,
+          "argumentOfPeriapsis": 1.9024088846738192,
+          "meanAnomaly": 0.4
+        }
+      },
+      "loaded": false,
+      "controllable": true,
+      "comms": "link",
+      "signalStrength": 0.82,
+      "crewCapacity": 0,
+      "crew": [],
+      "resources": [
+        {
+          "name": "ElectricCharge",
+          "amount": 420,
+          "capacity": 600
+        },
+        {
+          "name": "LiquidFuel",
+          "amount": 252,
+          "capacity": 360
+        },
+        {
+          "name": "Oxidizer",
+          "amount": 308,
+          "capacity": 440
+        },
+        {
+          "name": "MonoPropellant",
+          "amount": 84,
+          "capacity": 120
+        }
+      ],
+      "mass": 4200,
+      "deltaV": {
+        "total": 900,
+        "source": "estimate",
+        "stages": [
+          {
+            "stage": 0,
+            "deltaV": 900,
+            "twr": 1.2,
+            "burnTime": 98
+          }
+        ]
+      },
+      "attitude": {
+        "x": 0.071853,
+        "y": -0.068591,
+        "z": 0.687082,
+        "w": -0.719758
+      },
+      "docking": null,
+      "spaceObject": null
+    },
+    {
+      "id": 1314,
+      "registryCode": "FLT-1314-SHP",
+      "name": "Jool Mothership",
+      "vesselType": "ship",
+      "location": {
+        "kind": "orbit",
+        "situation": "orbiting",
+        "orbit": {
+          "referenceBody": "Jool",
+          "semiMajorAxis": 8950000,
+          "eccentricity": 0.01675977653631285,
+          "inclination": 0.017453292519943295,
+          "longitudeOfAscendingNode": 0.3141592653589793,
+          "argumentOfPeriapsis": 2.827433388230814,
+          "meanAnomaly": 2.2
+        }
+      },
+      "loaded": false,
+      "controllable": true,
+      "comms": "link",
+      "signalStrength": 0.82,
+      "crewCapacity": 0,
+      "crew": [],
+      "resources": [
+        {
+          "name": "ElectricCharge",
+          "amount": 700,
+          "capacity": 1000
+        },
+        {
+          "name": "LiquidFuel",
+          "amount": 2016,
+          "capacity": 2880
+        },
+        {
+          "name": "Oxidizer",
+          "amount": 2464,
+          "capacity": 3520
+        },
+        {
+          "name": "MonoPropellant",
+          "amount": 140,
+          "capacity": 200
+        },
+        {
+          "name": "SolidFuel",
+          "amount": 574,
+          "capacity": 820
+        }
+      ],
+      "mass": 4200,
+      "deltaV": {
+        "total": 900,
+        "source": "estimate",
+        "stages": [
+          {
+            "stage": 0,
+            "deltaV": 900,
+            "twr": 1.2,
+            "burnTime": 98
+          }
+        ]
+      },
+      "attitude": {
+        "x": -0.081981,
+        "y": 0.03434,
+        "z": 0.384825,
+        "w": -0.9187
+      },
+      "docking": {
+        "ports": [
+          {
+            "id": 13141,
+            "name": "Clamp-O-Tron Docking Port",
+            "size": "size1",
+            "free": true
+          }
+        ]
+      },
+      "spaceObject": null
+    },
+    {
+      "id": 1401,
+      "registryCode": "FLT-1401-AST",
+      "name": "Ast. FKK-501",
+      "vesselType": "spaceObject",
+      "location": {
+        "kind": "orbit",
+        "situation": "orbiting",
+        "orbit": {
+          "referenceBody": "Sun",
+          "semiMajorAxis": 13900000000,
+          "eccentricity": 0.03,
+          "inclination": 0.03490658503988659,
+          "longitudeOfAscendingNode": 0.8,
+          "argumentOfPeriapsis": 1.9,
+          "meanAnomaly": 2.4
+        }
+      },
+      "loaded": false,
+      "controllable": false,
+      "comms": "none",
+      "signalStrength": null,
+      "crewCapacity": 0,
+      "crew": [],
+      "resources": [],
+      "mass": 150000,
+      "deltaV": null,
+      "attitude": {
+        "x": 0.306456,
+        "y": -0.004322,
+        "z": 0.013423,
+        "w": -0.95178
+      },
+      "docking": null,
+      "spaceObject": {
+        "kind": "asteroid",
+        "sizeClass": "a"
+      }
+    },
+    {
+      "id": 1402,
+      "registryCode": "FLT-1402-AST",
+      "name": "Ast. FRY-374",
+      "vesselType": "spaceObject",
+      "location": {
+        "kind": "orbit",
+        "situation": "orbiting",
+        "orbit": {
+          "referenceBody": "Sun",
+          "semiMajorAxis": 13900000000,
+          "eccentricity": 0.03,
+          "inclination": 0.03490658503988659,
+          "longitudeOfAscendingNode": 0.8,
+          "argumentOfPeriapsis": 1.9,
+          "meanAnomaly": 2.4000011999999997
+        }
+      },
+      "loaded": false,
+      "controllable": false,
+      "comms": "none",
+      "signalStrength": null,
+      "crewCapacity": 0,
+      "crew": [],
+      "resources": [],
+      "mass": 150000,
+      "deltaV": null,
+      "attitude": {
+        "x": -0.115193,
+        "y": -0.042231,
+        "z": 0.34161,
+        "w": 0.931799
+      },
+      "docking": null,
+      "spaceObject": {
+        "kind": "asteroid",
+        "sizeClass": "c"
+      }
+    },
+    {
+      "id": 1403,
+      "registryCode": "FLT-1403-AST",
+      "name": "Ast. BKJ-380",
+      "vesselType": "spaceObject",
+      "location": {
+        "kind": "orbit",
+        "situation": "orbiting",
+        "orbit": {
+          "referenceBody": "Sun",
+          "semiMajorAxis": 13900000000,
+          "eccentricity": 0.03,
+          "inclination": 0.03490658503988659,
+          "longitudeOfAscendingNode": 0.8,
+          "argumentOfPeriapsis": 1.9,
+          "meanAnomaly": 2.4000024
+        }
+      },
+      "loaded": false,
+      "controllable": false,
+      "comms": "none",
+      "signalStrength": null,
+      "crewCapacity": 0,
+      "crew": [],
+      "resources": [],
+      "mass": 150000,
+      "deltaV": null,
+      "attitude": {
+        "x": 0.049342,
+        "y": 0.043006,
+        "z": 0.65564,
+        "w": 0.752231
+      },
+      "docking": null,
+      "spaceObject": {
+        "kind": "asteroid",
+        "sizeClass": "e"
+      }
+    },
+    {
+      "id": 1404,
+      "registryCode": "FLT-1404-AST",
+      "name": "Ast. ATF-346",
+      "vesselType": "spaceObject",
+      "location": {
+        "kind": "orbit",
+        "situation": "orbiting",
+        "orbit": {
+          "referenceBody": "Sun",
+          "semiMajorAxis": 12796930177.044123,
+          "eccentricity": 0.07600983938202262,
+          "inclination": 0.1337997331232457,
+          "longitudeOfAscendingNode": 5.390620139229097,
+          "argumentOfPeriapsis": 2.2322304372662463,
+          "meanAnomaly": 0.31935093223674366
+        }
+      },
+      "loaded": false,
+      "controllable": false,
+      "comms": "none",
+      "signalStrength": null,
+      "crewCapacity": 0,
+      "crew": [],
+      "resources": [],
+      "mass": 150000,
+      "deltaV": null,
+      "attitude": {
+        "x": 0.117903,
+        "y": 0.2219,
+        "z": 0.854752,
+        "w": 0.454158
+      },
+      "docking": null,
+      "spaceObject": {
+        "kind": "asteroid",
+        "sizeClass": "d"
+      }
+    },
+    {
+      "id": 1405,
+      "registryCode": "FLT-1405-AST",
+      "name": "Ast. MAK-237",
+      "vesselType": "spaceObject",
+      "location": {
+        "kind": "orbit",
+        "situation": "orbiting",
+        "orbit": {
+          "referenceBody": "Sun",
+          "semiMajorAxis": 14107091681.007296,
+          "eccentricity": 0.008692957777529955,
+          "inclination": 0.08333174475346428,
+          "longitudeOfAscendingNode": 2.2727195829102533,
+          "argumentOfPeriapsis": 3.97567062444519,
+          "meanAnomaly": 3.6543156538979207
+        }
+      },
+      "loaded": false,
+      "controllable": false,
+      "comms": "none",
+      "signalStrength": null,
+      "crewCapacity": 0,
+      "crew": [],
+      "resources": [],
+      "mass": 150000,
+      "deltaV": null,
+      "attitude": {
+        "x": -0.042898,
+        "y": -0.347294,
+        "z": 0.929709,
+        "w": 0.114839
+      },
+      "docking": null,
+      "spaceObject": {
+        "kind": "asteroid",
+        "sizeClass": "e"
+      }
+    },
+    {
+      "id": 1406,
+      "registryCode": "FLT-1406-AST",
+      "name": "Ast. BSS-236",
+      "vesselType": "spaceObject",
+      "location": {
+        "kind": "orbit",
+        "situation": "orbiting",
+        "orbit": {
+          "referenceBody": "Sun",
+          "semiMajorAxis": 12891054256.260395,
+          "eccentricity": 0.007720739133656025,
+          "inclination": 0.12454039538082134,
+          "longitudeOfAscendingNode": 4.548870685945665,
+          "argumentOfPeriapsis": 3.834050159715811,
+          "meanAnomaly": 4.13950221010548
+        }
+      },
+      "loaded": false,
+      "controllable": false,
+      "comms": "none",
+      "signalStrength": null,
+      "crewCapacity": 0,
+      "crew": [],
+      "resources": [],
+      "mass": 150000,
+      "deltaV": null,
+      "attitude": {
+        "x": 0.040406,
+        "y": -0.163271,
+        "z": 0.956887,
+        "w": -0.236806
+      },
+      "docking": null,
+      "spaceObject": {
+        "kind": "asteroid",
+        "sizeClass": "a"
+      }
+    },
+    {
+      "id": 1407,
+      "registryCode": "FLT-1407-AST",
+      "name": "Ast. WAV-292",
+      "vesselType": "spaceObject",
+      "location": {
+        "kind": "orbit",
+        "situation": "orbiting",
+        "orbit": {
+          "referenceBody": "Sun",
+          "semiMajorAxis": 12753975050.430744,
+          "eccentricity": 0.05772017315030098,
+          "inclination": 0.09674881508379045,
+          "longitudeOfAscendingNode": 1.3576143422695486,
+          "argumentOfPeriapsis": 5.03501623323048,
+          "meanAnomaly": 4.818541635577437
+        }
+      },
+      "loaded": false,
+      "controllable": false,
+      "comms": "none",
+      "signalStrength": null,
+      "crewCapacity": 0,
+      "crew": [],
+      "resources": [],
+      "mass": 150000,
+      "deltaV": null,
+      "attitude": {
+        "x": -0.01114,
+        "y": 0.016003,
+        "z": 0.820578,
+        "w": -0.571201
+      },
+      "docking": null,
+      "spaceObject": {
+        "kind": "asteroid",
+        "sizeClass": "b"
+      }
+    },
+    {
+      "id": 1408,
+      "registryCode": "FLT-1408-AST",
+      "name": "Ast. JGQ-903",
+      "vesselType": "spaceObject",
+      "location": {
+        "kind": "orbit",
+        "situation": "orbiting",
+        "orbit": {
+          "referenceBody": "Sun",
+          "semiMajorAxis": 13213657373.003662,
+          "eccentricity": 0.001682614777237177,
+          "inclination": 0.12781748291654413,
+          "longitudeOfAscendingNode": 3.0949153132683533,
+          "argumentOfPeriapsis": 0.928326610015237,
+          "meanAnomaly": 1.5551626932827374
+        }
+      },
+      "loaded": false,
+      "controllable": false,
+      "comms": "none",
+      "signalStrength": null,
+      "crewCapacity": 0,
+      "crew": [],
+      "resources": [],
+      "mass": 150000,
+      "deltaV": null,
+      "attitude": {
+        "x": -0.170761,
+        "y": 0.116122,
+        "z": 0.550205,
+        "w": -0.809093
+      },
+      "docking": null,
+      "spaceObject": {
+        "kind": "asteroid",
+        "sizeClass": "c"
+      }
+    },
+    {
+      "id": 1409,
+      "registryCode": "FLT-1409-AST",
+      "name": "Ast. ZZP-279",
+      "vesselType": "spaceObject",
+      "location": {
+        "kind": "orbit",
+        "situation": "orbiting",
+        "orbit": {
+          "referenceBody": "Sun",
+          "semiMajorAxis": 13984172530.379147,
+          "eccentricity": 0.02047125244513154,
+          "inclination": 0.12403845186816087,
+          "longitudeOfAscendingNode": 5.109382509307236,
+          "argumentOfPeriapsis": 4.340267775448559,
+          "meanAnomaly": 3.6189754444649167
+        }
+      },
+      "loaded": false,
+      "controllable": false,
+      "comms": "none",
+      "signalStrength": null,
+      "crewCapacity": 0,
+      "crew": [],
+      "resources": [],
+      "mass": 150000,
+      "deltaV": null,
+      "attitude": {
+        "x": -0.375873,
+        "y": 0.08868,
+        "z": 0.211813,
+        "w": -0.89777
+      },
+      "docking": null,
+      "spaceObject": {
+        "kind": "asteroid",
+        "sizeClass": "d"
+      }
+    },
+    {
+      "id": 1410,
+      "registryCode": "FLT-1410-AST",
+      "name": "Ast. JYL-565",
+      "vesselType": "spaceObject",
+      "location": {
+        "kind": "orbit",
+        "situation": "orbiting",
+        "orbit": {
+          "referenceBody": "Sun",
+          "semiMajorAxis": 14148298860.434443,
+          "eccentricity": 0.05251815253868699,
+          "inclination": 0.06178570331194176,
+          "longitudeOfAscendingNode": 5.0335632469020535,
+          "argumentOfPeriapsis": 5.9501182993389525,
+          "meanAnomaly": 2.9178797450149028
+        }
+      },
+      "loaded": false,
+      "controllable": false,
+      "comms": "none",
+      "signalStrength": null,
+      "crewCapacity": 0,
+      "crew": [],
+      "resources": [],
+      "mass": 150000,
+      "deltaV": null,
+      "attitude": {
+        "x": -0.21144,
+        "y": -0.028462,
+        "z": 0.130334,
+        "w": 0.968244
+      },
+      "docking": null,
+      "spaceObject": {
+        "kind": "asteroid",
+        "sizeClass": "e"
+      }
+    },
+    {
+      "id": 1411,
+      "registryCode": "FLT-1411-AST",
+      "name": "Ast. FSC-746",
+      "vesselType": "spaceObject",
+      "location": {
+        "kind": "orbit",
+        "situation": "orbiting",
+        "orbit": {
+          "referenceBody": "Sun",
+          "semiMajorAxis": 14532189323.473722,
+          "eccentricity": 0.009397900514304638,
+          "inclination": 0.05305348252135584,
+          "longitudeOfAscendingNode": 3.267122681322171,
+          "argumentOfPeriapsis": 4.976130614785253,
+          "meanAnomaly": 1.3797091378064692
+        }
+      },
+      "loaded": false,
+      "controllable": false,
+      "comms": "none",
+      "signalStrength": null,
+      "crewCapacity": 0,
+      "crew": [],
+      "resources": [],
+      "mass": 150000,
+      "deltaV": null,
+      "attitude": {
+        "x": -0.023262,
+        "y": -0.012687,
+        "z": 0.478647,
+        "w": 0.877607
+      },
+      "docking": null,
+      "spaceObject": {
+        "kind": "asteroid",
+        "sizeClass": "a"
+      }
+    },
+    {
+      "id": 1412,
+      "registryCode": "FLT-1412-AST",
+      "name": "Ast. BFC-121",
+      "vesselType": "spaceObject",
+      "location": {
+        "kind": "orbit",
+        "situation": "orbiting",
+        "orbit": {
+          "referenceBody": "Sun",
+          "semiMajorAxis": 12715000542.253256,
+          "eccentricity": 0.032742177974432705,
+          "inclination": 0.13160536338395393,
+          "longitudeOfAscendingNode": 2.386079675601702,
+          "argumentOfPeriapsis": 2.164530967071573,
+          "meanAnomaly": 0.4773559755867308
+        }
+      },
+      "loaded": false,
+      "controllable": false,
+      "comms": "none",
+      "signalStrength": null,
+      "crewCapacity": 0,
+      "crew": [],
+      "resources": [],
+      "mass": 150000,
+      "deltaV": null,
+      "attitude": {
+        "x": 0.104645,
+        "y": 0.122738,
+        "z": 0.751005,
+        "w": 0.640294
+      },
+      "docking": null,
+      "spaceObject": {
+        "kind": "asteroid",
+        "sizeClass": "b"
+      }
+    },
+    {
+      "id": 1413,
+      "registryCode": "FLT-1413-AST",
+      "name": "Ast. RBZ-551",
+      "vesselType": "spaceObject",
+      "location": {
+        "kind": "orbit",
+        "situation": "orbiting",
+        "orbit": {
+          "referenceBody": "Sun",
+          "semiMajorAxis": 13062849730.625748,
+          "eccentricity": 0.02177890319377184,
+          "inclination": 0.07566659269705044,
+          "longitudeOfAscendingNode": 6.143121377046121,
+          "argumentOfPeriapsis": 1.6577884534061482,
+          "meanAnomaly": 4.6250700481149565
+        }
+      },
+      "loaded": false,
+      "controllable": false,
+      "comms": "none",
+      "signalStrength": null,
+      "crewCapacity": 0,
+      "crew": [],
+      "resources": [],
+      "mass": 150000,
+      "deltaV": null,
+      "attitude": {
+        "x": 0.114668,
+        "y": 0.323655,
+        "z": 0.885282,
+        "w": 0.313647
+      },
+      "docking": null,
+      "spaceObject": {
+        "kind": "asteroid",
+        "sizeClass": "c"
+      }
+    },
+    {
+      "id": 1414,
+      "registryCode": "FLT-1414-AST",
+      "name": "Ast. LUG-638",
+      "vesselType": "spaceObject",
+      "location": {
+        "kind": "orbit",
+        "situation": "orbiting",
+        "orbit": {
+          "referenceBody": "Sun",
+          "semiMajorAxis": 14331827109.120787,
+          "eccentricity": 0.07131293563172221,
+          "inclination": 0.11178143633597974,
+          "longitudeOfAscendingNode": 1.484063165942037,
+          "argumentOfPeriapsis": 4.317485583964553,
+          "meanAnomaly": 4.028760538893224
+        }
+      },
+      "loaded": false,
+      "controllable": false,
+      "comms": "none",
+      "signalStrength": null,
+      "crewCapacity": 0,
+      "crew": [],
+      "resources": [],
+      "mass": 150000,
+      "deltaV": null,
+      "attitude": {
+        "x": 0.006453,
+        "y": -0.257966,
+        "z": 0.96583,
+        "w": -0.024159
+      },
+      "docking": null,
+      "spaceObject": {
+        "kind": "asteroid",
+        "sizeClass": "d"
+      }
+    },
+    {
+      "id": 1415,
+      "registryCode": "FLT-1415-AST",
+      "name": "Ast. NDL-108",
+      "vesselType": "spaceObject",
+      "location": {
+        "kind": "orbit",
+        "situation": "orbiting",
+        "orbit": {
+          "referenceBody": "Sun",
+          "semiMajorAxis": 13261869127.303362,
+          "eccentricity": 0.03981287954375148,
+          "inclination": 0.029611830453756226,
+          "longitudeOfAscendingNode": 1.8375914545114278,
+          "argumentOfPeriapsis": 4.685092314408985,
+          "meanAnomaly": 6.199644058025518
+        }
+      },
+      "loaded": false,
+      "controllable": false,
+      "comms": "none",
+      "signalStrength": null,
+      "crewCapacity": 0,
+      "crew": [],
+      "resources": [],
+      "mass": 150000,
+      "deltaV": null,
+      "attitude": {
+        "x": 0.027574,
+        "y": -0.066983,
+        "z": 0.922286,
+        "w": -0.379659
+      },
+      "docking": null,
+      "spaceObject": {
+        "kind": "asteroid",
+        "sizeClass": "e"
+      }
+    },
+    {
+      "id": 1420,
+      "registryCode": "FLT-1420-AST",
+      "name": "C/2026 K1 (Comet)",
+      "vesselType": "spaceObject",
+      "location": {
+        "kind": "orbit",
+        "situation": "orbiting",
+        "orbit": {
+          "referenceBody": "Sun",
+          "semiMajorAxis": 13900000000,
+          "eccentricity": 0.03,
+          "inclination": 0.03490658503988659,
+          "longitudeOfAscendingNode": 0.8,
+          "argumentOfPeriapsis": 1.9,
+          "meanAnomaly": 2.40000408
+        }
+      },
+      "loaded": false,
+      "controllable": false,
+      "comms": "none",
+      "signalStrength": null,
+      "crewCapacity": 0,
+      "crew": [],
+      "resources": [],
+      "mass": 150000,
+      "deltaV": null,
+      "attitude": {
+        "x": 0.055798,
+        "y": 0.042173,
+        "z": 0.601488,
+        "w": 0.795814
+      },
+      "docking": null,
+      "spaceObject": {
+        "kind": "comet",
+        "sizeClass": "d"
+      }
+    },
+    {
+      "id": 1421,
+      "registryCode": "FLT-1421-AST",
+      "name": "Ast. KCA-101",
+      "vesselType": "spaceObject",
+      "location": {
+        "kind": "orbit",
+        "situation": "orbiting",
+        "orbit": {
+          "referenceBody": "Kerbin",
+          "semiMajorAxis": 3400000,
+          "eccentricity": 0.17647058823529413,
+          "inclination": 0.20943951023931956,
+          "longitudeOfAscendingNode": 1.2217304763960306,
+          "argumentOfPeriapsis": 0.3490658503988659,
+          "meanAnomaly": 1.1
+        }
+      },
+      "loaded": false,
+      "controllable": false,
+      "comms": "none",
+      "signalStrength": null,
+      "crewCapacity": 0,
+      "crew": [],
+      "resources": [],
+      "mass": 150000,
+      "deltaV": null,
+      "attitude": {
+        "x": 0.135372,
+        "y": 0.216844,
+        "z": 0.820087,
+        "w": 0.511967
+      },
+      "docking": null,
+      "spaceObject": {
+        "kind": "asteroid",
+        "sizeClass": "b"
+      }
+    },
+    {
+      "id": 1422,
+      "registryCode": "FLT-1422-AST",
+      "name": "Ast. KCE-202",
+      "vesselType": "spaceObject",
+      "location": {
+        "kind": "orbit",
+        "situation": "orbiting",
+        "orbit": {
+          "referenceBody": "Kerbin",
+          "semiMajorAxis": 25600000,
+          "eccentricity": 0.1953125,
+          "inclination": 0.06981317007977318,
+          "longitudeOfAscendingNode": 3.490658503988659,
+          "argumentOfPeriapsis": 1.5707963267948966,
+          "meanAnomaly": 4
+        }
+      },
+      "loaded": false,
+      "controllable": false,
+      "comms": "none",
+      "signalStrength": null,
+      "crewCapacity": 0,
+      "crew": [],
+      "resources": [],
+      "mass": 150000,
+      "deltaV": null,
+      "attitude": {
+        "x": -0.066168,
+        "y": -0.339323,
+        "z": 0.920993,
+        "w": 0.179594
+      },
+      "docking": null,
+      "spaceObject": {
+        "kind": "asteroid",
+        "sizeClass": "e"
+      }
+    },
+    {
+      "id": 1431,
+      "registryCode": "FLT-1431-DBR",
+      "name": "Mun Lander 1 Debris",
+      "vesselType": "debris",
+      "location": {
+        "kind": "orbit",
+        "situation": "orbiting",
+        "orbit": {
+          "referenceBody": "Kerbin",
+          "semiMajorAxis": 937500,
+          "eccentricity": 0.28,
+          "inclination": 0.010471975511965976,
+          "longitudeOfAscendingNode": 3.6651914291880923,
+          "argumentOfPeriapsis": 0.6981317007977318,
+          "meanAnomaly": 3.9
+        }
+      },
+      "loaded": false,
+      "controllable": false,
+      "comms": "none",
+      "signalStrength": null,
+      "crewCapacity": 0,
+      "crew": [],
+      "resources": [],
+      "mass": 900,
+      "deltaV": null,
+      "attitude": {
+        "x": -0.011331,
+        "y": -0.253443,
+        "z": 0.966319,
+        "w": 0.043201
+      },
+      "docking": null,
+      "spaceObject": null
+    },
+    {
+      "id": 1432,
+      "registryCode": "FLT-1432-DBR",
+      "name": "Mun Lander 1 Debris",
+      "vesselType": "debris",
+      "location": {
+        "kind": "orbit",
+        "situation": "orbiting",
+        "orbit": {
+          "referenceBody": "Mun",
+          "semiMajorAxis": 354000,
+          "eccentricity": 0.4124293785310734,
+          "inclination": 0.03490658503988659,
+          "longitudeOfAscendingNode": 0.17453292519943295,
+          "argumentOfPeriapsis": 0,
+          "meanAnomaly": 2.4
+        }
+      },
+      "loaded": false,
+      "controllable": false,
+      "comms": "none",
+      "signalStrength": null,
+      "crewCapacity": 0,
+      "crew": [],
+      "resources": [],
+      "mass": 600,
+      "deltaV": null,
+      "attitude": {
+        "x": 0.021427,
+        "y": -0.064481,
+        "z": 0.946783,
+        "w": -0.314619
+      },
+      "docking": null,
+      "spaceObject": null
+    }
+  ],
+  "markers": {
+    "items": [
+      {
+        "id": "site:launchPad",
+        "name": "KSC Launch Pad",
+        "kind": "site",
+        "body": "Kerbin",
+        "latitude": -0.0016919996695020918,
+        "longitude": -1.3012738570556723
+      },
+      {
+        "id": "site:runway",
+        "name": "KSC Runway",
+        "kind": "site",
+        "body": "Kerbin",
+        "latitude": -0.0008620460428280313,
+        "longitude": -1.302166418435142
+      },
+      {
+        "id": "waypoint:5f1c0a2e",
+        "name": "Crater Rim",
+        "kind": "waypoint",
+        "body": "Mun",
+        "latitude": 0.1466076571675237,
+        "longitude": 0.4118977034706618
+      },
+      {
+        "id": "contract:9b7d41c3",
+        "name": "Site Gamma Mun",
+        "kind": "contract",
+        "body": "Mun",
+        "latitude": -0.24783675378319478,
+        "longitude": 1.9634954084936207
+      },
+      {
+        "id": "flag:1190",
+        "name": "First Footprint",
+        "kind": "flag",
+        "body": "Mun",
+        "latitude": 0.011693705988362009,
+        "longitude": -0.6789330790257941
+      },
+      {
+        "id": "vessel:1103",
+        "name": "Mun Lander 2",
+        "kind": "vessel",
+        "body": "Mun",
+        "latitude": 0.05585053606381855,
+        "longitude": -0.9023352232810684
+      }
+    ]
+  }
+}

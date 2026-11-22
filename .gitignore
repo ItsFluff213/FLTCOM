@@ -1,0 +1,18 @@
+bin/
+obj/
+dist/
+dist-test/
+node_modules/
+display/dist/
+*.user
+.vs/
+.idea/
+*.log
+TestResults/
+
+# Local screenshot staging and public-site preview artifacts.
+/site-candidates/
+/.site-preview/
+
+# Per-machine Claude Code settings can hold local paths and permissions.
+.claude/settings.local.json

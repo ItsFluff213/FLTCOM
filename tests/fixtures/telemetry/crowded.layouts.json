@@ -1,0 +1,1068 @@
+[
+  {
+    "protocolVersion": 14,
+    "type": "layout",
+    "vesselId": 1101,
+    "revision": 1,
+    "parts": [
+      {
+        "id": 31,
+        "name": "dockingPort2",
+        "position": {
+          "x": 0,
+          "y": 1.6,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "size": {
+          "x": 0.9,
+          "y": 0.4,
+          "z": 0.9
+        },
+        "category": "other",
+        "stage": -1
+      },
+      {
+        "id": 32,
+        "name": "crewCabin",
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "size": {
+          "x": 2.5,
+          "y": 2.6,
+          "z": 2.5
+        },
+        "category": "pod",
+        "stage": -1
+      },
+      {
+        "id": 33,
+        "name": "fuelTank",
+        "position": {
+          "x": 0,
+          "y": -2.4,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "size": {
+          "x": 2.5,
+          "y": 2.2,
+          "z": 2.5
+        },
+        "category": "tank",
+        "stage": -1
+      },
+      {
+        "id": 34,
+        "name": "largeSolarPanel",
+        "position": {
+          "x": 3.4,
+          "y": -0.2,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "size": {
+          "x": 4.2,
+          "y": 0.1,
+          "z": 1.4
+        },
+        "category": "other",
+        "stage": -1
+      },
+      {
+        "id": 35,
+        "name": "largeSolarPanel",
+        "position": {
+          "x": -3.4,
+          "y": -0.2,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "size": {
+          "x": 4.2,
+          "y": 0.1,
+          "z": 1.4
+        },
+        "category": "other",
+        "stage": -1
+      },
+      {
+        "id": 36,
+        "name": "crewCabin",
+        "position": {
+          "x": 0,
+          "y": -4.8,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "size": {
+          "x": 2.5,
+          "y": 2.6,
+          "z": 2.5
+        },
+        "category": "pod",
+        "stage": -1
+      },
+      {
+        "id": 37,
+        "name": "dockingPort2",
+        "position": {
+          "x": 0,
+          "y": -6.4,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "size": {
+          "x": 0.9,
+          "y": 0.4,
+          "z": 0.9
+        },
+        "category": "other",
+        "stage": -1
+      }
+    ],
+    "model": "/art/craft/station.json"
+  },
+  {
+    "protocolVersion": 14,
+    "type": "layout",
+    "vesselId": 1102,
+    "revision": 1,
+    "parts": [
+      {
+        "id": 1,
+        "name": "probeCoreOcto",
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "size": {
+          "x": 0.9,
+          "y": 0.4,
+          "z": 0.9
+        },
+        "category": "pod",
+        "stage": 0
+      },
+      {
+        "id": 2,
+        "name": "fuelTank",
+        "position": {
+          "x": 0,
+          "y": -0.9,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "size": {
+          "x": 1.25,
+          "y": 1.1,
+          "z": 1.25
+        },
+        "category": "tank",
+        "stage": 0
+      },
+      {
+        "id": 3,
+        "name": "liquidEngine",
+        "position": {
+          "x": 0,
+          "y": -1.9,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "size": {
+          "x": 1.25,
+          "y": 1,
+          "z": 1.25
+        },
+        "category": "engine",
+        "stage": 0
+      },
+      {
+        "id": 4,
+        "name": "solarPanels5",
+        "position": {
+          "x": 0.9,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "size": {
+          "x": 0.9,
+          "y": 0.1,
+          "z": 0.9
+        },
+        "category": "other",
+        "stage": 0
+      },
+      {
+        "id": 5,
+        "name": "solarPanels5",
+        "position": {
+          "x": -0.9,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "size": {
+          "x": 0.9,
+          "y": 0.1,
+          "z": 0.9
+        },
+        "category": "other",
+        "stage": 0
+      }
+    ],
+    "model": "/art/craft/single-stage.json"
+  },
+  {
+    "protocolVersion": 14,
+    "type": "layout",
+    "vesselId": 1104,
+    "revision": 1,
+    "parts": [
+      {
+        "id": 1,
+        "name": "probeCoreOcto",
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "size": {
+          "x": 0.9,
+          "y": 0.4,
+          "z": 0.9
+        },
+        "category": "pod",
+        "stage": 0
+      },
+      {
+        "id": 2,
+        "name": "fuelTank",
+        "position": {
+          "x": 0,
+          "y": -0.9,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "size": {
+          "x": 1.25,
+          "y": 1.1,
+          "z": 1.25
+        },
+        "category": "tank",
+        "stage": 0
+      },
+      {
+        "id": 3,
+        "name": "liquidEngine",
+        "position": {
+          "x": 0,
+          "y": -1.9,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "size": {
+          "x": 1.25,
+          "y": 1,
+          "z": 1.25
+        },
+        "category": "engine",
+        "stage": 0
+      },
+      {
+        "id": 4,
+        "name": "solarPanels5",
+        "position": {
+          "x": 0.9,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "size": {
+          "x": 0.9,
+          "y": 0.1,
+          "z": 0.9
+        },
+        "category": "other",
+        "stage": 0
+      },
+      {
+        "id": 5,
+        "name": "solarPanels5",
+        "position": {
+          "x": -0.9,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "size": {
+          "x": 0.9,
+          "y": 0.1,
+          "z": 0.9
+        },
+        "category": "other",
+        "stage": 0
+      }
+    ],
+    "model": "/art/craft/single-stage.json"
+  },
+  {
+    "protocolVersion": 14,
+    "type": "layout",
+    "vesselId": 1105,
+    "revision": 1,
+    "parts": [
+      {
+        "id": 11,
+        "name": "mk1pod",
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "size": {
+          "x": 1.25,
+          "y": 1.5,
+          "z": 1.25
+        },
+        "category": "pod",
+        "stage": 2
+      },
+      {
+        "id": 12,
+        "name": "decoupler1-2",
+        "position": {
+          "x": 0,
+          "y": -0.95,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "size": {
+          "x": 1.25,
+          "y": 0.2,
+          "z": 1.25
+        },
+        "category": "decoupler",
+        "stage": 1
+      },
+      {
+        "id": 13,
+        "name": "fuelTank",
+        "position": {
+          "x": 0,
+          "y": -1.9,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "size": {
+          "x": 1.25,
+          "y": 1.6,
+          "z": 1.25
+        },
+        "category": "tank",
+        "stage": 1
+      },
+      {
+        "id": 14,
+        "name": "liquidEngine",
+        "position": {
+          "x": 0,
+          "y": -3.1,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "size": {
+          "x": 1.25,
+          "y": 0.9,
+          "z": 1.25
+        },
+        "category": "engine",
+        "stage": 1
+      },
+      {
+        "id": 15,
+        "name": "decoupler1-2",
+        "position": {
+          "x": 0,
+          "y": -3.7,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "size": {
+          "x": 1.25,
+          "y": 0.2,
+          "z": 1.25
+        },
+        "category": "decoupler",
+        "stage": 0
+      },
+      {
+        "id": 16,
+        "name": "fuelTank",
+        "position": {
+          "x": 0,
+          "y": -5,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "size": {
+          "x": 1.25,
+          "y": 2.4,
+          "z": 1.25
+        },
+        "category": "tank",
+        "stage": 0
+      },
+      {
+        "id": 17,
+        "name": "fuelTank",
+        "position": {
+          "x": 0,
+          "y": -7.4,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "size": {
+          "x": 1.25,
+          "y": 2.4,
+          "z": 1.25
+        },
+        "category": "tank",
+        "stage": 0
+      },
+      {
+        "id": 18,
+        "name": "liquidEngine",
+        "position": {
+          "x": 0,
+          "y": -9,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "size": {
+          "x": 1.25,
+          "y": 0.9,
+          "z": 1.25
+        },
+        "category": "engine",
+        "stage": 0
+      },
+      {
+        "id": 19,
+        "name": "radialEngineBody",
+        "position": {
+          "x": 1.3,
+          "y": -8.4,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "size": {
+          "x": 0.4,
+          "y": 0.8,
+          "z": 0.4
+        },
+        "category": "engine",
+        "stage": 0
+      },
+      {
+        "id": 20,
+        "name": "radialEngineBody",
+        "position": {
+          "x": -1.3,
+          "y": -8.4,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "size": {
+          "x": 0.4,
+          "y": 0.8,
+          "z": 0.4
+        },
+        "category": "engine",
+        "stage": 0
+      },
+      {
+        "id": 21,
+        "name": "fuelTank",
+        "position": {
+          "x": 1.3,
+          "y": -6,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "size": {
+          "x": 0.8,
+          "y": 2.6,
+          "z": 0.8
+        },
+        "category": "tank",
+        "stage": 0
+      },
+      {
+        "id": 22,
+        "name": "fuelTank",
+        "position": {
+          "x": -1.3,
+          "y": -6,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "size": {
+          "x": 0.8,
+          "y": 2.6,
+          "z": 0.8
+        },
+        "category": "tank",
+        "stage": 0
+      }
+    ],
+    "model": "/art/craft/two-stage.json"
+  },
+  {
+    "protocolVersion": 14,
+    "type": "layout",
+    "vesselId": 1107,
+    "revision": 1,
+    "parts": [
+      {
+        "id": 1,
+        "name": "probeCoreOcto",
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "size": {
+          "x": 0.9,
+          "y": 0.4,
+          "z": 0.9
+        },
+        "category": "pod",
+        "stage": 0
+      },
+      {
+        "id": 2,
+        "name": "fuelTank",
+        "position": {
+          "x": 0,
+          "y": -0.9,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "size": {
+          "x": 1.25,
+          "y": 1.1,
+          "z": 1.25
+        },
+        "category": "tank",
+        "stage": 0
+      },
+      {
+        "id": 3,
+        "name": "liquidEngine",
+        "position": {
+          "x": 0,
+          "y": -1.9,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "size": {
+          "x": 1.25,
+          "y": 1,
+          "z": 1.25
+        },
+        "category": "engine",
+        "stage": 0
+      },
+      {
+        "id": 4,
+        "name": "solarPanels5",
+        "position": {
+          "x": 0.9,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "size": {
+          "x": 0.9,
+          "y": 0.1,
+          "z": 0.9
+        },
+        "category": "other",
+        "stage": 0
+      },
+      {
+        "id": 5,
+        "name": "solarPanels5",
+        "position": {
+          "x": -0.9,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "size": {
+          "x": 0.9,
+          "y": 0.1,
+          "z": 0.9
+        },
+        "category": "other",
+        "stage": 0
+      }
+    ],
+    "model": "/art/craft/single-stage.json"
+  },
+  {
+    "protocolVersion": 14,
+    "type": "layout",
+    "vesselId": 1306,
+    "revision": 1,
+    "parts": [
+      {
+        "id": 11,
+        "name": "mk1pod",
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "size": {
+          "x": 1.25,
+          "y": 1.5,
+          "z": 1.25
+        },
+        "category": "pod",
+        "stage": 2
+      },
+      {
+        "id": 12,
+        "name": "decoupler1-2",
+        "position": {
+          "x": 0,
+          "y": -0.95,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "size": {
+          "x": 1.25,
+          "y": 0.2,
+          "z": 1.25
+        },
+        "category": "decoupler",
+        "stage": 1
+      },
+      {
+        "id": 13,
+        "name": "fuelTank",
+        "position": {
+          "x": 0,
+          "y": -1.9,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "size": {
+          "x": 1.25,
+          "y": 1.6,
+          "z": 1.25
+        },
+        "category": "tank",
+        "stage": 1
+      },
+      {
+        "id": 14,
+        "name": "liquidEngine",
+        "position": {
+          "x": 0,
+          "y": -3.1,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "size": {
+          "x": 1.25,
+          "y": 0.9,
+          "z": 1.25
+        },
+        "category": "engine",
+        "stage": 1
+      },
+      {
+        "id": 15,
+        "name": "decoupler1-2",
+        "position": {
+          "x": 0,
+          "y": -3.7,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "size": {
+          "x": 1.25,
+          "y": 0.2,
+          "z": 1.25
+        },
+        "category": "decoupler",
+        "stage": 0
+      },
+      {
+        "id": 16,
+        "name": "fuelTank",
+        "position": {
+          "x": 0,
+          "y": -5,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "size": {
+          "x": 1.25,
+          "y": 2.4,
+          "z": 1.25
+        },
+        "category": "tank",
+        "stage": 0
+      },
+      {
+        "id": 17,
+        "name": "fuelTank",
+        "position": {
+          "x": 0,
+          "y": -7.4,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "size": {
+          "x": 1.25,
+          "y": 2.4,
+          "z": 1.25
+        },
+        "category": "tank",
+        "stage": 0
+      },
+      {
+        "id": 18,
+        "name": "liquidEngine",
+        "position": {
+          "x": 0,
+          "y": -9,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "size": {
+          "x": 1.25,
+          "y": 0.9,
+          "z": 1.25
+        },
+        "category": "engine",
+        "stage": 0
+      },
+      {
+        "id": 19,
+        "name": "radialEngineBody",
+        "position": {
+          "x": 1.3,
+          "y": -8.4,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "size": {
+          "x": 0.4,
+          "y": 0.8,
+          "z": 0.4
+        },
+        "category": "engine",
+        "stage": 0
+      },
+      {
+        "id": 20,
+        "name": "radialEngineBody",
+        "position": {
+          "x": -1.3,
+          "y": -8.4,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "size": {
+          "x": 0.4,
+          "y": 0.8,
+          "z": 0.4
+        },
+        "category": "engine",
+        "stage": 0
+      },
+      {
+        "id": 21,
+        "name": "fuelTank",
+        "position": {
+          "x": 1.3,
+          "y": -6,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "size": {
+          "x": 0.8,
+          "y": 2.6,
+          "z": 0.8
+        },
+        "category": "tank",
+        "stage": 0
+      },
+      {
+        "id": 22,
+        "name": "fuelTank",
+        "position": {
+          "x": -1.3,
+          "y": -6,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "w": 1
+        },
+        "size": {
+          "x": 0.8,
+          "y": 2.6,
+          "z": 0.8
+        },
+        "category": "tank",
+        "stage": 0
+      }
+    ],
+    "model": "/art/craft/two-stage.json"
+  }
+]

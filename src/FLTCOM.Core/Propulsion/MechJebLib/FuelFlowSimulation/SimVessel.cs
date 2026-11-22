@@ -1,0 +1,346 @@
+/*
+ * Copyright Lamont Granquist, Sebastien Gaggini and the MechJeb contributors
+ * SPDX-License-Identifier: LicenseRef-PD-hp OR Unlicense OR CC0-1.0 OR 0BSD OR MIT-0 OR MIT OR LGPL-2.1+
+ * Source path: MechJeb2 MechJebLib/FuelFlowSimulation/SimVessel.cs (modified for FLTCOM)
+ */
+
+using System;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using System.Text;
+using MechJebLib.FuelFlowSimulation.PartModules;
+using MechJebLib.Primitives;
+using MechJebLib.Utils;
+using static System.FormattableString;
+
+namespace MechJebLib.FuelFlowSimulation
+{
+    public class SimVessel : IDisposable
+    {
+        private static readonly ObjectPool<SimVessel> _pool = new ObjectPool<SimVessel>(New, Clear);
+
+        public readonly List<SimPart> Parts = new List<SimPart>(30);
+        public readonly DictOfLists<int, SimPart> PartsRemainingInStage = new DictOfLists<int, SimPart>(10);
+        public readonly DictOfLists<int, SimModuleAvionics> AvionicsRemainingInStage = new DictOfLists<int, SimModuleAvionics>(10);
+        public readonly DictOfLists<int, SimModuleEngines> EnginesDroppedInStage = new DictOfLists<int, SimModuleEngines>(10);
+        public readonly DictOfLists<int, SimModuleEngines> EnginesActivatedInStage = new DictOfLists<int, SimModuleEngines>(10);
+        public readonly DictOfLists<int, SimModuleRCS> RCSActivatedInStage = new DictOfLists<int, SimModuleRCS>(10);
+        public readonly DictOfLists<int, SimModuleRCS> RCSDroppedInStage = new DictOfLists<int, SimModuleRCS>(10);
+        public readonly List<SimModuleEngines> ActiveEngines = new List<SimModuleEngines>(10);
+        public readonly List<SimModuleRCS> ActiveRcs = new List<SimModuleRCS>(10);
+
+        public bool HasLaunchClamp;
+        public int CurrentStage;
+        private int _savedStage;
+        public double MainThrottle = 1.0;
+        public double Mass;
+        public V3 ThrustCurrent;
+        public V3 ThrustMax;
+        public V3 ThrustMin;
+        public double RcsThrust;
+        public double ThrustMagnitude;
+        public double ThrustMinMagnitude;
+        public double ThrustMaxMagnitude;
+        public double ThrustNoCosLoss;
+        public double SpoolupCurrent;
+        public double ATMPressure;
+        public double ATMDensity;
+        public double MachNumber;
+
+        // whether the atmosphere has oxygen: the intakes that need it gather nothing without it (none on Eve or Duna)
+        public bool ATMOxygen = true;
+        public double T;
+        public V3 R, V, U;
+
+        // CurrentStage gets scribbled over by the FuelFlowSimulation, SetCurrentStage() is intended to be used in
+        // the VesselBuilder and DecouplingAnalyzer to figure out the right value, ResetCurrentStage() is called by
+        // the VesselUpdater to reset it back.
+        public void SetCurrentStage(int stage)
+        {
+            CurrentStage = stage;
+            _savedStage = stage;
+        }
+
+        public void ResetCurrentStage(int stage)
+        {
+            if (stage < _savedStage)
+                SetCurrentStage(stage);
+            else
+                CurrentStage = _savedStage;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void SetConditions(double atmDensity, double atmPressure, double machNumber, bool atmOxygen = true)
+        {
+            ATMDensity = atmDensity;
+            ATMPressure = atmPressure;
+            MachNumber = machNumber;
+            ATMOxygen = atmOxygen;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void SetInitial(double t, V3 r, V3 v, V3 u)
+        {
+            T = t;
+            R = r;
+            V = v;
+            U = u;
+        }
+
+        // Indexes the engines and RCS by the stage they activate in and the stage they are dropped in, this must be
+        // called after the DecouplingAnalyzer has set the DecoupledInStage of the parts.
+        public void UpdateEngineSet()
+        {
+            foreach (SimPart part in Parts)
+            {
+                foreach (SimPartModule m in part.Modules)
+                {
+                    if (m is SimModuleEngines e)
+                    {
+                        EnginesActivatedInStage[part.InverseStage].Add(e);
+                        EnginesDroppedInStage[part.DecoupledInStage].Add(e);
+                    }
+
+                    if (m is SimModuleRCS r)
+                    {
+                        RCSActivatedInStage[part.InverseStage].Add(r);
+                        RCSDroppedInStage[part.DecoupledInStage].Add(r);
+                    }
+                }
+            }
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void UpdateMass()
+        {
+            Mass = 0;
+
+            foreach (SimPart part in PartsRemainingInStage[CurrentStage])
+            {
+                part.UpdateMass();
+                Mass += part.Mass;
+            }
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void Stage()
+        {
+            if (CurrentStage < 0)
+                return;
+
+            CurrentStage--;
+
+            ActivateEnginesAndRCS();
+
+            UpdateMass();
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void ActivateEnginesAndRCS()
+        {
+            foreach (SimModuleEngines e in EnginesActivatedInStage[CurrentStage])
+                if (e.IsEnabled && !e.IsShutdown)
+                    e.Activate();
+
+            foreach (SimModuleRCS r in RCSActivatedInStage[CurrentStage])
+                if (r.IsEnabled)
+                    r.Activate();
+        }
+
+        // call UpdateEngineStats() first: this reads the flows and thrusts it computes
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void UpdateActiveEngines()
+        {
+            ActiveEngines.Clear();
+
+            // FIXME: why am I not iterating over the last ActiveEngines?
+            for (int i = -1; i < CurrentStage; i++)
+            {
+                foreach (SimModuleEngines e in EnginesDroppedInStage[i])
+                {
+                    if (e.MassFlowRate <= 0) continue;
+
+                    if (e.IsUnrestartableDeadEngine)
+                        continue;
+
+                    e.UpdateEngineStatus();
+
+                    ActiveEngines.Add(e);
+                }
+            }
+
+            // UpdateEngineStatus() can shut down an engine and, with AutoCutoff, its symmetry counterparts which may already
+            // be in the list, so filter once every status is updated
+            ActiveEngines.RemoveAll(e => !e.IsOperational);
+
+            ComputeThrustAndSpoolup();
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void UpdateActiveRcs()
+        {
+            ActiveRcs.Clear();
+
+            // FIXME: why am I not iterating over the last ActiveRcs?
+            for (int i = -1; i < CurrentStage; i++)
+            {
+                foreach (SimModuleRCS r in RCSDroppedInStage[i])
+                {
+                    if (r.MassFlowRate <= 0) continue;
+
+                    r.UpdateRCSStatus();
+
+                    if (!r.RcsEnabled)
+                        continue;
+
+                    ActiveRcs.Add(r);
+                }
+            }
+
+            ComputeRcsThrust();
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private void ComputeRcsThrust()
+        {
+            RcsThrust = 0;
+
+            for (int i = 0; i < ActiveRcs.Count; i++)
+            {
+                SimModuleRCS r = ActiveRcs[i];
+
+                r.Update();
+                RcsThrust += r.Thrust;
+            }
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private void ComputeThrustAndSpoolup()
+        {
+            ThrustCurrent = V3.zero;
+            ThrustMax = V3.zero;
+            ThrustMin = V3.zero;
+            ThrustMagnitude = 0;
+            ThrustMinMagnitude = 0;
+            ThrustMaxMagnitude = 0;
+            ThrustNoCosLoss = 0;
+            SpoolupCurrent = 0;
+
+            // the spoolup is that of the engines which ignite in this stage, weighted by their thrust: the engines lit in an
+            // earlier stage are already running, and the NodeExecutor adds up the SpoolUpTime of every segment of a burn
+            double spoolupThrust = 0;
+
+            for (int i = 0; i < ActiveEngines.Count; i++)
+            {
+                SimModuleEngines e = ActiveEngines[i];
+
+                if (e.Part.InverseStage == CurrentStage)
+                {
+                    SpoolupCurrent += e.ThrustCurrent.magnitude * e.ModuleSpoolupTime;
+                    spoolupThrust += e.ThrustCurrent.magnitude;
+                }
+
+                // no e.Update() here: UpdateActiveEngines() runs right after UpdateEngineStats(), which has just updated every
+                // engine still on the vessel, so updating the active ones again (SetConsumptionRates() and all) did the same
+                // work twice per simulation step
+                ThrustCurrent += e.ThrustCurrent;
+                ThrustMin += e.ThrustMin;
+                ThrustMax += e.ThrustMax;
+                ThrustNoCosLoss += e.ThrustCurrent.magnitude;
+            }
+
+            ThrustMagnitude = ThrustCurrent.magnitude;
+            ThrustMinMagnitude = ThrustMin.magnitude;
+            ThrustMaxMagnitude = ThrustMax.magnitude;
+            SpoolupCurrent = spoolupThrust > 0 ? SpoolupCurrent / spoolupThrust : 0;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool ActiveEngineNeedsUllage()
+        {
+            foreach (SimModuleEngines e in ActiveEngines)
+            {
+                if (e.Ullage)
+                    return true;
+            }
+
+            return false;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void Dispose()
+        {
+            foreach (SimPart p in Parts)
+                p.Dispose();
+            _pool.Release(this);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static SimVessel Borrow() => _pool.Borrow();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static SimVessel New() => new SimVessel();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static void Clear(SimVessel v)
+        {
+            v.HasLaunchClamp = false;
+            v.Parts.Clear();
+            v.PartsRemainingInStage.Clear();
+            v.AvionicsRemainingInStage.Clear();
+            v.EnginesDroppedInStage.Clear();
+            v.EnginesActivatedInStage.Clear();
+            v.RCSActivatedInStage.Clear();
+            v.RCSDroppedInStage.Clear();
+            v.ActiveEngines.Clear();
+            v.ActiveRcs.Clear();
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void UpdateRcsStats()
+        {
+            for (int i = -1; i < CurrentStage; i++)
+                foreach (SimModuleRCS e in RCSDroppedInStage[i])
+                    e.Update();
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void UpdateEngineStats()
+        {
+            for (int i = -1; i < CurrentStage; i++)
+                foreach (SimModuleEngines e in EnginesDroppedInStage[i])
+                    e.Update();
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void SaveRcsStatus()
+        {
+            for (int i = -1; i < CurrentStage; i++)
+                foreach (SimModuleRCS r in RCSDroppedInStage[i])
+                    r.SaveStatus();
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void ResetRcsStatus()
+        {
+            for (int i = -1; i < CurrentStage; i++)
+                foreach (SimModuleRCS r in RCSDroppedInStage[i])
+                    r.ResetStatus();
+        }
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("SimVessel:");
+            // the doubles are G17 (and floats G9) throughout the dumps so the values round-trip into test fixtures
+            sb.AppendLine(Invariant($"  CurrentStage={CurrentStage} HasLaunchClamp={HasLaunchClamp} MainThrottle={MainThrottle:G17}"));
+            sb.AppendLine(Invariant($"  ATMPressure={ATMPressure:G17} ATMDensity={ATMDensity:G17} MachNumber={MachNumber:G17}"));
+            sb.AppendLine(Invariant($"  T={T:G17} R={R} V={V} U={U}"));
+            sb.AppendLine(Invariant($"  Parts ({Parts.Count}):"));
+            foreach (SimPart part in Parts)
+                sb.AppendLine(part.ToString().Indent(4));
+
+            return sb.ToString().TrimEnd();
+        }
+    }
+}

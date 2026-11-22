@@ -1,0 +1,51 @@
+name: Bug report
+description: Something broke, crashed, or flew the wrong way.
+labels: ["bug"]
+body:
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: What you did, in order. Name the operation you approved, if any.
+      placeholder: |
+        1. Selected a ship in low Kerbin orbit
+        2. Composed CIRCULARIZE and approved the briefing
+        3. Answered WARP
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual
+      description: What happened instead. A screenshot helps.
+    validations:
+      required: true
+  - type: textarea
+    id: log
+    attributes:
+      label: KSP.log excerpt
+      description: KSP.log sits in your KSP folder. Paste the lines that mention FLTCOM or an exception near the problem. Remove your user name and file paths first.
+      render: text
+    validations:
+      required: false
+  - type: input
+    id: version
+    attributes:
+      label: FLTCOM version
+      description: The display header shows it after LINK, for example FLTCOM 0.1.0.
+      placeholder: "0.1.0"
+    validations:
+      required: true
+  - type: textarea
+    id: mods
+    attributes:
+      label: Other mods
+      description: The other folders in your GameData, or "none".
+    validations:
+      required: true

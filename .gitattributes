@@ -1,0 +1,8 @@
+* text=auto
+*.woff2 binary
+*.png binary
+*.mp4 binary
+assets/fonts/**/OFL.txt -text
+display/src/protocol.gen.ts text eol=lf linguist-generated
+src/FLTCOM.Core/Protocol/Protocol.g.cs text eol=lf linguist-generated
+tests/fixtures/telemetry/*.json text eol=lf

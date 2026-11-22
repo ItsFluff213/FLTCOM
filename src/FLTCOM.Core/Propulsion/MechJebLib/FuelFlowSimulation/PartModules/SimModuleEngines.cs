@@ -1,0 +1,632 @@
+/*
+ * Copyright Lamont Granquist, Sebastien Gaggini and the MechJeb contributors
+ * SPDX-License-Identifier: LicenseRef-PD-hp OR Unlicense OR CC0-1.0 OR 0BSD OR MIT-0 OR MIT OR LGPL-2.1+
+ * Source path: MechJeb2 MechJebLib/FuelFlowSimulation/PartModules/SimModuleEngines.cs (modified for FLTCOM)
+ */
+
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using System.Text;
+using MechJebLib.Interpolants;
+using MechJebLib.Primitives;
+using MechJebLib.Utils;
+using static MechJebLib.Utils.Statics;
+using static System.FormattableString;
+
+namespace MechJebLib.FuelFlowSimulation.PartModules
+{
+    public enum SimFlowMode
+    {
+        NO_FLOW,
+        ALL_VESSEL,
+        STAGE_PRIORITY_FLOW,
+        STACK_PRIORITY_SEARCH,
+        ALL_VESSEL_BALANCE,
+        STAGE_PRIORITY_FLOW_BALANCE,
+        STAGE_STACK_FLOW,
+        STAGE_STACK_FLOW_BALANCE,
+        NULL
+    }
+
+    public class SimModuleEngines : SimPartModule
+    {
+        private static readonly ObjectPool<SimModuleEngines> _pool = new ObjectPool<SimModuleEngines>(New, m => m.Clear());
+
+        public readonly List<SimPropellant> Propellants = new List<SimPropellant>();
+        public readonly Dictionary<int, SimFlowMode> PropellantFlowModes = new Dictionary<int, SimFlowMode>();
+        public readonly Dictionary<int, double> ResourceConsumptions = new Dictionary<int, double>();
+        public readonly List<double> ThrustTransformMultipliers = new List<double>();
+        public readonly List<V3> ThrustDirectionVectors = new List<V3>();
+
+        public bool IsOperational;
+        public double FlowMultiplier;
+        public double MultFlow;
+        public V3 ThrustCurrent;
+        public V3 ThrustMax;
+        public V3 ThrustMin;
+        public double MassFlowRate;
+        public double ISP;
+        public float G;
+        public float MaxFuelFlow;
+        public float MaxThrust;
+        public float MinFuelFlow;
+        public float MinThrust;
+        public float MultIsp;
+        public float Clamp;
+        public float FlowMultCap;
+        public float FlowMultCapSharpness;
+        public bool ThrottleLocked;
+        public float ThrottleLimiter;
+        public bool AtmChangeFlow;
+        public bool UseAtmCurve;
+        public bool UseAtmCurveIsp;
+        public bool UseThrottleIspCurve;
+        public bool UseThrustCurve;
+        public bool UseVelCurve;
+        public bool UseVelCurveIsp;
+        public double ModuleResiduals;
+        public double ModuleSpoolupTime;
+        public bool AutoCutoff;
+        public bool NoPropellants;
+
+        // in flight, KSP has fired this engine's stage and the engine is not ignited (shut down by the player, an action
+        // group or an autopilot): the simulation does not light it again
+        public bool IsShutdown;
+
+        public bool IsModuleEnginesRf;
+        public bool IsUnrestartableDeadEngine;
+        public bool Ullage;
+
+        // ModuleEngines throttle response and ignition state
+        public float ThrottleResponseRate;
+        public float ThrottleIgniteLevelMult;
+        public float ThrottleStartupMult;
+        public float ThrottleStartedMult;
+        public float ThrottleShutdownMult;
+        public bool ThrottleInstant;
+        public bool ThrottleUseAlternate;
+        public bool IndependentThrottle;
+        public float IndependentThrottlePercentage;
+        public float CurrentThrottle;
+        public bool EngineIgnited;
+        public bool Flameout;
+
+        // ModuleEnginesRF throttle response and ignition state, left at RealFuels' declared defaults on other engines
+        public bool PressureFed;
+        public float ThrottlePressureFedStartupMult;
+        public float ThrottleDownMult;
+        public float ThrottleClamp;
+        public bool UseThrottleCurve;
+        public bool Ignited;
+
+        public readonly DoubleInterpolant ThrustCurve = DoubleInterpolant.Rent();
+        public readonly DoubleInterpolant ThrottleIspCurve = DoubleInterpolant.Rent();
+        public readonly DoubleInterpolant ThrottleIspCurveAtmStrength = DoubleInterpolant.Rent();
+        public readonly DoubleInterpolant VelCurve = DoubleInterpolant.Rent();
+        public readonly DoubleInterpolant VelCurveIsp = DoubleInterpolant.Rent();
+        public readonly DoubleInterpolant ATMCurve = DoubleInterpolant.Rent();
+        public readonly DoubleInterpolant ATMCurveIsp = DoubleInterpolant.Rent();
+        public readonly DoubleInterpolant AtmosphereCurve = DoubleInterpolant.Rent();
+
+        // ModuleEnginesRF's remapping of the requested throttle to the output throttle, only used if UseThrottleCurve
+        public readonly DoubleInterpolant ThrottleCurve = DoubleInterpolant.Rent();
+
+        private double _throttle   => Part.Vessel.MainThrottle;
+        private double _atmPressure => Part.Vessel.ATMPressure;
+        private double _atmDensity  => Part.Vessel.ATMDensity;
+        private double _machNumber  => Part.Vessel.MachNumber;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void Activate() => IsOperational = true;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void UpdateEngineStatus()
+        {
+            if (CanDrawResources())
+                return;
+
+            IsOperational = false;
+
+            if (!AutoCutoff)
+                return;
+
+            foreach (SimPart part in Part.SymmetryCounterParts)
+            {
+                foreach (SimPartModule module in part.Modules)
+                {
+                    if (!(module is SimModuleEngines engine))
+                        continue;
+                    engine.IsOperational = false;
+                }
+            }
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private bool CanDrawResources()
+        {
+            if (NoPropellants)
+                return false;
+
+            SimVessel vessel = Part.Vessel;
+
+            foreach (int resourceId in ResourceConsumptions.Keys)
+                switch (PropellantFlowModes[resourceId])
+                {
+                    case SimFlowMode.NO_FLOW:
+                        if (!PartHasResource(Part, resourceId))
+                            return false;
+                        break;
+                    case SimFlowMode.ALL_VESSEL:
+                    case SimFlowMode.ALL_VESSEL_BALANCE:
+                    case SimFlowMode.STAGE_PRIORITY_FLOW:
+                    case SimFlowMode.STAGE_PRIORITY_FLOW_BALANCE:
+                        if (!PartsHaveResource(vessel.PartsRemainingInStage[vessel.CurrentStage], resourceId))
+                            return false;
+                        break;
+                    case SimFlowMode.STAGE_STACK_FLOW:
+                    case SimFlowMode.STAGE_STACK_FLOW_BALANCE:
+                    case SimFlowMode.STACK_PRIORITY_SEARCH:
+                        if (!PartsHaveResource(Part.CrossFeedPartSet, resourceId))
+                            return false;
+                        break;
+                    case SimFlowMode.NULL:
+                        return false;
+                    default:
+                        return false;
+                }
+
+            return true;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private bool PartHasResource(SimPart part, int resourceId)
+        {
+            if (!part.TryGetResource(resourceId, out SimResource resource))
+                return false;
+
+            // no air to gather in vacuum, so an air-breathing engine stops there (KSP's flow Clamp would otherwise keep it
+            // running on free air with next to no thrust, for millions of seconds); nor in an atmosphere with no oxygen
+            if (resource.FromIntake && (_atmDensity <= 0 || (resource.NeedsOxygen && !Part.Vessel.ATMOxygen)))
+                return false;
+
+            return resource.Amount > resource.MaxAmount * ModuleResiduals + part.ResourceRequestRemainingThreshold;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private bool PartsHaveResource(IReadOnlyList<SimPart> parts, int resourceId)
+        {
+            for (int i = 0; i < parts.Count; i++)
+                if (PartHasResource(parts[i], resourceId))
+                    return true;
+            return false;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public override void Dispose() => _pool.Release(this);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static SimModuleEngines Borrow(SimPart part)
+        {
+            SimModuleEngines engine = _pool.Borrow();
+            engine.Part = part;
+            return engine;
+        }
+
+        protected override void Clear()
+        {
+            base.Clear();
+            IsOperational = false;
+            FlowMultiplier = 0;
+            MultFlow = 0;
+            ThrustCurrent = V3.zero;
+            ThrustMax = V3.zero;
+            ThrustMin = V3.zero;
+            MassFlowRate = 0;
+            ISP = 0;
+            G = 0;
+            MaxFuelFlow = 0;
+            MaxThrust = 0;
+            MinFuelFlow = 0;
+            MinThrust = 0;
+            MultIsp = 0;
+            Clamp = 0;
+            FlowMultCap = 0;
+            FlowMultCapSharpness = 0;
+            ThrottleLocked = false;
+            ThrottleLimiter = 0;
+            AtmChangeFlow = false;
+            UseAtmCurve = false;
+            UseAtmCurveIsp = false;
+            UseThrottleIspCurve = false;
+            UseThrustCurve = false;
+            UseVelCurve = false;
+            UseVelCurveIsp = false;
+            ModuleResiduals = 0;
+            ModuleSpoolupTime = 0;
+            AutoCutoff = false;
+            NoPropellants = false;
+            IsShutdown = false;
+            IsModuleEnginesRf = false;
+            IsUnrestartableDeadEngine = false;
+            Ullage = false;
+            ThrottleResponseRate = 0;
+            ThrottleIgniteLevelMult = 0;
+            ThrottleStartupMult = 0;
+            ThrottleStartedMult = 0;
+            ThrottleShutdownMult = 0;
+            ThrottleInstant = false;
+            ThrottleUseAlternate = false;
+            IndependentThrottle = false;
+            IndependentThrottlePercentage = 0;
+            CurrentThrottle = 0;
+            EngineIgnited = false;
+            Flameout = false;
+            PressureFed = false;
+            ThrottlePressureFedStartupMult = 0;
+            ThrottleDownMult = 0;
+            ThrottleClamp = 0;
+            UseThrottleCurve = false;
+            Ignited = false;
+            ThrustDirectionVectors.Clear();
+            PropellantFlowModes.Clear();
+            ResourceConsumptions.Clear();
+            Propellants.Clear();
+            ThrustTransformMultipliers.Clear();
+            ThrustCurve.Clear();
+            ThrottleIspCurve.Clear();
+            ThrottleIspCurveAtmStrength.Clear();
+            VelCurve.Clear();
+            VelCurveIsp.Clear();
+            ATMCurve.Clear();
+            ATMCurveIsp.Clear();
+            AtmosphereCurve.Clear();
+            ThrottleCurve.Clear();
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static SimModuleEngines New() => new SimModuleEngines();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private bool DrawingFuelFromPartDroppedInStage(SimPart p, int resourceId, int stageNum) =>
+            PartHasResource(p, resourceId) && p.DecoupledInStage == stageNum;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private bool DrawingFuelFromPartsDroppedInStage(IList<SimPart> parts, int resourceId, int stageNum)
+        {
+            for (int i = 0; i < parts.Count; i++)
+                if (PartHasResource(parts[i], resourceId) && parts[i].DecoupledInStage == stageNum)
+                    return true;
+            return false;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static bool PartHasCapacityFor(SimPart p, int resourceId) =>
+            p.TryGetResource(resourceId, out SimResource resource) && resource.MaxAmount > p.ResourceRequestRemainingThreshold;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static bool PartsDroppedInStageHaveCapacityFor(IList<SimPart> parts, int resourceId, int stageNum)
+        {
+            for (int i = 0; i < parts.Count; i++)
+                if (parts[i].DecoupledInStage == stageNum && PartHasCapacityFor(parts[i], resourceId))
+                    return true;
+            return false;
+        }
+
+        // true if the engine can draw on a tank which is dropped along with it in stageNum, whether or not that tank is empty yet.
+        // this uses the capacity, so that the engine still has its drop tanks after it has drained them.
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool HasDropTanks(int stageNum)
+        {
+            SimVessel vessel = Part.Vessel;
+
+            foreach (int resourceId in ResourceConsumptions.Keys)
+                switch (PropellantFlowModes[resourceId])
+                {
+                    case SimFlowMode.NO_FLOW:
+                        if (Part.DecoupledInStage == stageNum && PartHasCapacityFor(Part, resourceId))
+                            return true;
+                        break;
+                    case SimFlowMode.ALL_VESSEL:
+                    case SimFlowMode.ALL_VESSEL_BALANCE:
+                    case SimFlowMode.STAGE_PRIORITY_FLOW:
+                    case SimFlowMode.STAGE_PRIORITY_FLOW_BALANCE:
+                        if (PartsDroppedInStageHaveCapacityFor(vessel.PartsRemainingInStage[vessel.CurrentStage], resourceId, stageNum))
+                            return true;
+                        break;
+                    case SimFlowMode.STAGE_STACK_FLOW:
+                    case SimFlowMode.STAGE_STACK_FLOW_BALANCE:
+                    case SimFlowMode.STACK_PRIORITY_SEARCH:
+                        if (PartsDroppedInStageHaveCapacityFor(Part.CrossFeedPartSet, resourceId, stageNum))
+                            return true;
+                        break;
+                }
+
+            return false;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool WouldDropAccessibleFuelTank(int stageNum)
+        {
+            SimVessel vessel = Part.Vessel;
+
+            foreach (int resourceId in ResourceConsumptions.Keys)
+                switch (PropellantFlowModes[resourceId])
+                {
+                    case SimFlowMode.NO_FLOW:
+                        if (DrawingFuelFromPartDroppedInStage(Part, resourceId, stageNum))
+                            return true;
+                        break;
+                    case SimFlowMode.ALL_VESSEL:
+                    case SimFlowMode.ALL_VESSEL_BALANCE:
+                    case SimFlowMode.STAGE_PRIORITY_FLOW:
+                    case SimFlowMode.STAGE_PRIORITY_FLOW_BALANCE:
+                        if (DrawingFuelFromPartsDroppedInStage(vessel.PartsRemainingInStage[vessel.CurrentStage], resourceId, stageNum))
+                            return true;
+                        break;
+                    case SimFlowMode.STAGE_STACK_FLOW:
+                    case SimFlowMode.STAGE_STACK_FLOW_BALANCE:
+                    case SimFlowMode.STACK_PRIORITY_SEARCH:
+                        if (DrawingFuelFromPartsDroppedInStage(Part.CrossFeedPartSet, resourceId, stageNum))
+                            return true;
+                        break;
+                }
+
+            return false;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void Update()
+        {
+            ISP = ISPAtConditions(FlowFraction(_throttle * 0.01 * ThrottleLimiter));
+            FlowMultiplier = FlowMultiplierAtConditions();
+            MassFlowRate = FlowRateAtConditions();
+            RefreshThrust();
+            SetConsumptionRates();
+        }
+
+        // KSP's ModuleEngines.OnLoad derives the fuel flows from the thrusts at the vacuum isp, but an engine which leaves a fuel
+        // flow at zero gets it from its thrust here.  the flow and the thrusts both use these, so they agree.
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private double EffectiveMinFuelFlow() =>
+            MinFuelFlow == 0 && MinThrust > 0 ? MinThrust / (AtmosphereCurve.Evaluate(0f) * G) : MinFuelFlow;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private double EffectiveMaxFuelFlow() =>
+            MaxFuelFlow == 0 && MaxThrust > 0 ? MaxThrust / (AtmosphereCurve.Evaluate(0f) * G) : MaxFuelFlow;
+
+        // the fuel flow at a throttle (the main throttle times the limiter, 0 to 1), as a fraction of the max flow: where the
+        // throttle Isp curve is read, as KSP's ModuleEngines and RealFuels' solver read it
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private double FlowFraction(double throttle)
+        {
+            double maxFlow = EffectiveMaxFuelFlow();
+            return maxFlow > 0 ? Lerp(EffectiveMinFuelFlow(), maxFlow, throttle) / maxFlow : 0;
+        }
+
+        // the thrust at a throttle (0 to 1), with the Isp at that throttle (the same at any throttle without a throttle Isp curve)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private double ThrustAtThrottle(double throttle)
+        {
+            double isp = UseThrottleIspCurve ? ISPAtConditions(FlowFraction(throttle)) : ISP;
+            return Lerp(EffectiveMinFuelFlow(), EffectiveMaxFuelFlow(), throttle) * FlowMultiplier * isp * G * MultIsp * MultFlow;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private double FlowRateAtConditions() =>
+            // as in KSP's ModuleEngines.RequiredPropellantMass, multFlow (TestFlight's thrust-loss failures) scales the mass flow
+            // along with the flowMultiplier, so it lowers the thrust and lengthens the burn without changing the isp
+            Lerp(EffectiveMinFuelFlow(), EffectiveMaxFuelFlow(), _throttle * 0.01f * ThrottleLimiter) * FlowMultiplier * MultFlow;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private void RefreshThrust()
+        {
+            ThrustCurrent = V3.zero;
+            ThrustMax = V3.zero;
+            ThrustMin = V3.zero;
+
+            double thrustLimiter = ThrottleLimiter / 100f;
+
+            // each at its own throttle's Isp: the throttle Isp curve lowers the Isp at low flow
+            double eMaxThrust = ThrustAtThrottle(thrustLimiter);
+            double eMinThrust = ThrottleLocked ? eMaxThrust : ThrustAtThrottle(0);
+            // the MassFlowRate already carries the FlowMultiplier and MultFlow
+            double eCurrentThrust = MassFlowRate * ISP * G * MultIsp;
+
+            for (int i = 0; i < ThrustDirectionVectors.Count; i++)
+            {
+                V3 thrustDirectionVector = ThrustDirectionVectors[i];
+
+                double thrustTransformMultiplier = ThrustTransformMultipliers[i];
+
+                ThrustCurrent += eCurrentThrust * thrustDirectionVector * thrustTransformMultiplier;
+                ThrustMax += eMaxThrust * thrustDirectionVector * thrustTransformMultiplier;
+                ThrustMin += eMinThrust * thrustDirectionVector * thrustTransformMultiplier;
+            }
+        }
+
+        // for a single EngineModule, determine its flowMultiplier, subject to atmDensity + machNumber
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private double FlowMultiplierAtConditions()
+        {
+            double flowMultiplier = 1;
+
+            if (AtmChangeFlow)
+            {
+                if (UseAtmCurve)
+                    flowMultiplier = ATMCurve.Evaluate(_atmDensity * 40 / 49);
+                else
+                    flowMultiplier = _atmDensity * 40 / 49;
+            }
+
+            if (UseThrustCurve)
+                // MJ doesn't support thrust curves.  And Engines where "1.0" values don't give reasonable numbers
+                // will not work with MJ.  I don't think this will be much of a problem, but I don't care if it is.
+                //flowMultiplier *= ThrustCurve.Evaluate(0.5);
+                flowMultiplier *= 1.0;
+
+            if (UseVelCurve)
+                flowMultiplier *= VelCurve.Evaluate(_machNumber);
+
+            if (flowMultiplier > FlowMultCap)
+            {
+                double excess = flowMultiplier - FlowMultCap;
+                flowMultiplier = FlowMultCap + excess / (FlowMultCapSharpness + excess / FlowMultCap);
+            }
+
+            // some engines have e.Clamp set to float.MaxValue so we have to have the e.Clamp < 1 sanity check here
+            if (flowMultiplier < Clamp && Clamp < 1)
+                flowMultiplier = Clamp;
+
+            return flowMultiplier;
+        }
+
+        // for a single EngineModule, evaluate its ISP, subject to all the different possible curves
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private double ISPAtConditions(double flowFraction)
+        {
+            double isp = AtmosphereCurve.Evaluate(_atmPressure);
+            if (UseThrottleIspCurve)
+                isp *= Lerp(1f, ThrottleIspCurve.Evaluate(flowFraction), ThrottleIspCurveAtmStrength.Evaluate(_atmPressure));
+            if (UseAtmCurveIsp)
+                isp *= ATMCurveIsp.Evaluate(_atmDensity * 40 / 49);
+            if (UseVelCurveIsp)
+                isp *= VelCurveIsp.Evaluate(_machNumber);
+            return isp;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private void SetConsumptionRates()
+        {
+            ResourceConsumptions.Clear();
+            PropellantFlowModes.Clear();
+
+            double totalDensity = 0;
+
+            for (int j = 0; j < Propellants.Count; j++)
+            {
+                SimPropellant p = Propellants[j];
+                double density = p.density;
+
+                // skip zero density (eC, air intakes, etc.) assuming those are available and infinite
+                if (density <= 0)
+                    continue;
+
+                if (!PropellantFlowModes.ContainsKey(p.id))
+                    PropellantFlowModes.Add(p.id, p.FlowMode);
+
+                // ignoreForIsp fuels are not part of the total density
+                if (p.ignoreForIsp)
+                    continue;
+
+                totalDensity += p.ratio * density;
+            }
+
+            // this is also the volume flow rate of the non-ignoreForIsp fuels.  although this is a bit janky since the p.ratios in most
+            // stock engines sum up to 2, not 1 (1.1 + 0.9), so this is not per-liter but per-summed-ratios (the massflowrate you get out
+            // of the atmosphere curves (above) are also similarly adjusted by these ratios -- it is a bit of a horror show).
+            // when no propellant counts for the density (an ElectricCharge-only engine, or one whose only propellants with mass are
+            // ignoreForIsp) KSP's ModuleEngines divides by 1 instead (its mixtureDensityRecip), and so does this: dividing by 0 made
+            // the flow infinite.
+            double volumeFlowRate = totalDensity > 0 ? MassFlowRate / totalDensity : MassFlowRate;
+
+            for (int j = 0; j < Propellants.Count; j++)
+            {
+                SimPropellant p = Propellants[j];
+                double density = p.density;
+
+                // this is the individual propellant volume rate.  we are including the ignoreForIsp fuels in this loop and this will
+                // correctly calculate the volume rates of all the propellants, in L/sec.  if you sum these it'll be larger than the
+                // volumeFlowRate by including both the ignoreForIsp fuels and if the ratios sum up to more than one.
+                double propVolumeRate = p.ratio * volumeFlowRate;
+
+                // skip zero density here as well
+                if (density <= 0)
+                    continue;
+
+                if (ResourceConsumptions.ContainsKey(p.id))
+                    ResourceConsumptions[p.id] += propVolumeRate;
+                else
+                    ResourceConsumptions.Add(p.id, propVolumeRate);
+            }
+        }
+
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public EngineSignature Signature() => new EngineSignature(Part.PersistentId, Index);
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine(ModuleLine("SimModuleEngines", CommonFieldList()));
+            sb.AppendLine(Invariant(
+                $"  IsOperational={IsOperational} IsEnabled={IsEnabled} IsUnrestartableDeadEngine={IsUnrestartableDeadEngine} NoPropellants={NoPropellants}"));
+            // the floats are G9 and the doubles G17 so the values round-trip into test fixtures
+            sb.AppendLine(Invariant($"  MaxFuelFlow={MaxFuelFlow:G9} MinFuelFlow={MinFuelFlow:G9} MaxThrust={MaxThrust:G9} MinThrust={MinThrust:G9} G={G:G9}"));
+            sb.AppendLine(Invariant(
+                $"  ThrottleLocked={ThrottleLocked} ThrottleLimiter={ThrottleLimiter:G9} MultIsp={MultIsp:G9} MultFlow={MultFlow:G17} FlowMultiplier={FlowMultiplier:G17}"));
+            sb.AppendLine(Invariant($"  Clamp={Clamp:G9} FlowMultCap={FlowMultCap:G9} FlowMultCapSharpness={FlowMultCapSharpness:G9}"));
+            sb.AppendLine(Invariant(
+                $"  AtmChangeFlow={AtmChangeFlow} UseAtmCurve={UseAtmCurve} UseAtmCurveIsp={UseAtmCurveIsp} UseThrottleIspCurve={UseThrottleIspCurve} UseThrustCurve={UseThrustCurve} UseVelCurve={UseVelCurve} UseVelCurveIsp={UseVelCurveIsp}"));
+            sb.AppendLine(Invariant(
+                $"  ModuleResiduals={ModuleResiduals:G17} ModuleSpoolupTime={ModuleSpoolupTime:G17} AutoCutoff={AutoCutoff} IsModuleEnginesRf={IsModuleEnginesRf} Ullage={Ullage}"));
+
+            // the throttle response fields, only where they differ from the KSP and RealFuels declared defaults
+            var throttleFields = new List<string>();
+            AddField(throttleFields, "ThrottleResponseRate", ThrottleResponseRate, -1f);
+            AddField(throttleFields, "ThrottleIgniteLevelMult", ThrottleIgniteLevelMult, 1f);
+            AddField(throttleFields, "ThrottleStartupMult", ThrottleStartupMult, 1f);
+            AddField(throttleFields, "ThrottleStartedMult", ThrottleStartedMult, 1f);
+            AddField(throttleFields, "ThrottleShutdownMult", ThrottleShutdownMult, 100f);
+            AddField(throttleFields, "ThrottleInstant", ThrottleInstant, false);
+            AddField(throttleFields, "ThrottleUseAlternate", ThrottleUseAlternate, false);
+            AddField(throttleFields, "IndependentThrottle", IndependentThrottle, false);
+            AddField(throttleFields, "IndependentThrottlePercentage", IndependentThrottlePercentage, 0f);
+            AddField(throttleFields, "CurrentThrottle", CurrentThrottle, 0f);
+            AddField(throttleFields, "EngineIgnited", EngineIgnited, false);
+            AddField(throttleFields, "Flameout", Flameout, false);
+            AddField(throttleFields, "PressureFed", PressureFed, false);
+            AddField(throttleFields, "ThrottlePressureFedStartupMult", ThrottlePressureFedStartupMult, 5f);
+            AddField(throttleFields, "ThrottleDownMult", ThrottleDownMult, 100f);
+            AddField(throttleFields, "ThrottleClamp", ThrottleClamp, 0.005f);
+            AddField(throttleFields, "UseThrottleCurve", UseThrottleCurve, false);
+            AddField(throttleFields, "Ignited", Ignited, false);
+            if (throttleFields.Count > 0)
+                sb.AppendLine("  " + string.Join(" ", throttleFields));
+
+            void AppendCurve(string name, DoubleInterpolant curve)
+            {
+                // empty curves are the default and very common, so omit them to keep the dump readable
+                if (!curve.IsEmpty)
+                    sb.AppendLine(Invariant($"  {name}: {curve}"));
+            }
+
+            AppendCurve("AtmosphereCurve", AtmosphereCurve);
+            AppendCurve("ThrustCurve", ThrustCurve);
+            AppendCurve("ThrottleIspCurve", ThrottleIspCurve);
+            AppendCurve("ThrottleIspCurveAtmStrength", ThrottleIspCurveAtmStrength);
+            AppendCurve("VelCurve", VelCurve);
+            AppendCurve("VelCurveIsp", VelCurveIsp);
+            AppendCurve("ATMCurve", ATMCurve);
+            AppendCurve("ATMCurveIsp", ATMCurveIsp);
+            // engines without a throttleCurve hold a placeholder, so only dump the ones that use it
+            if (UseThrottleCurve)
+                AppendCurve("ThrottleCurve", ThrottleCurve);
+
+            sb.Append("  ThrustTransformMultipliers:");
+            foreach (double m in ThrustTransformMultipliers)
+                sb.Append(Invariant($" {m:G17}"));
+            sb.AppendLine();
+
+            sb.Append("  ThrustDirectionVectors:");
+            foreach (V3 v in ThrustDirectionVectors)
+                sb.Append(Invariant($" {v}"));
+            sb.AppendLine();
+
+            sb.Append("  Propellants:");
+            foreach (SimPropellant p in Propellants)
+                sb.Append(Invariant(
+                    $" [id={p.id} ignoreForIsp={p.ignoreForIsp} ratio={p.ratio:G17} flowMode={p.FlowMode} density={p.density:G17}]"));
+            return sb.ToString();
+        }
+    }
+}

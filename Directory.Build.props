@@ -1,0 +1,16 @@
+<Project>
+  <PropertyGroup>
+    <Version>0.1.0</Version>
+    <FileVersion>$(Version)</FileVersion>
+    <Authors>FLTCOM contributors</Authors>
+    <Copyright>Copyright (c) FLTCOM contributors</Copyright>
+    <LangVersion>9.0</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Deterministic>true</Deterministic>
+    <PathMap>$(MSBuildThisFileDirectory)=/_/</PathMap>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+</Project>

@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <RootNamespace>FLTCOM</RootNamespace>
+    <AssemblyName>FLTCOM</AssemblyName>
+    <KSPBT_ModRoot>$(MSBuildThisFileDirectory)../../dist/GameData/FLTCOM/</KSPBT_ModRoot>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="KSPBuildTools" Version="1.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <KSPVersionFile Include="." Destination="$(KSPBT_ModRoot)FLTCOM.version" KSP_Version="1.12.5" KSP_Version_Min="1.12.5" KSP_Version_Max="1.12.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../FLTCOM.Core/FLTCOM.Core.csproj" />
+    <ProjectReference Include="../FLTCOM.Server/FLTCOM.Server.csproj" />
+  </ItemGroup>
+
+  <Import Project="../KspPlugin.targets" />
+</Project>

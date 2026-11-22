@@ -1,0 +1,44 @@
+/*
+ * Copyright Lamont Granquist, Sebastien Gaggini and the MechJeb contributors
+ * SPDX-License-Identifier: LicenseRef-PD-hp OR Unlicense OR CC0-1.0 OR 0BSD OR MIT-0 OR MIT OR LGPL-2.1+
+ * Source path: MechJeb2 MechJebLib/FuelFlowSimulation/PartModules/SimProceduralFairingDecoupler.cs (modified for FLTCOM)
+ */
+
+using System.Collections.Generic;
+using MechJebLib.Utils;
+
+namespace MechJebLib.FuelFlowSimulation.PartModules
+{
+    public class SimProceduralFairingDecoupler : SimPartModule
+    {
+        private static readonly ObjectPool<SimProceduralFairingDecoupler> _pool = new ObjectPool<SimProceduralFairingDecoupler>(New, m => m.Clear());
+
+        public bool IsDecoupled = false;
+
+        public override void Dispose() => _pool.Release(this);
+
+        public static SimProceduralFairingDecoupler Borrow(SimPart part)
+        {
+            SimProceduralFairingDecoupler decoupler = _pool.Borrow();
+            decoupler.Part = part;
+            return decoupler;
+        }
+
+        private static SimProceduralFairingDecoupler New() => new SimProceduralFairingDecoupler();
+
+        // the updater sets IsDecoupled only when Procedural Fairings loaded correctly, so a pooled decoupler would otherwise keep
+        // the last vessel's value
+        protected override void Clear()
+        {
+            base.Clear();
+            IsDecoupled = false;
+        }
+
+        public override string ToString()
+        {
+            List<string> fields = CommonFieldList();
+            AddField(fields, "IsDecoupled", IsDecoupled, false);
+            return ModuleLine("SimProceduralFairingDecoupler", fields);
+        }
+    }
+}

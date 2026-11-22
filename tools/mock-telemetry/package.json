@@ -1,0 +1,9 @@
+{
+  "name": "fltcom-mock-telemetry",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server.mjs",
+    "fixtures": "node make-fixtures.mjs"
+  }
+}

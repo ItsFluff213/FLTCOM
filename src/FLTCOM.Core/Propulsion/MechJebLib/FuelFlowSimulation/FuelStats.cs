@@ -1,0 +1,64 @@
+/*
+ * Copyright Lamont Granquist, Sebastien Gaggini and the MechJeb contributors
+ * SPDX-License-Identifier: LicenseRef-PD-hp OR Unlicense OR CC0-1.0 OR 0BSD OR MIT-0 OR MIT OR LGPL-2.1+
+ * Source path: MechJeb2 MechJebLib/FuelFlowSimulation/FuelStats.cs (modified for FLTCOM)
+ */
+
+using System.Collections.Generic;
+
+namespace MechJebLib.FuelFlowSimulation
+{
+    // FIXME: should get objectpooled at some point
+    public class FuelStats
+    {
+        public double DeltaTime;
+        public double DeltaV;
+        public double EndMass;
+        public double Isp;
+        public int KSPStage;
+        public double StagedMass;
+        public double StartMass;
+        public double StartTime;
+        public double Thrust;
+        public double MinThrust;
+        public double MaxThrust;
+        public double SpoolUpTime;
+        public double MaxRcsDeltaV;
+        public double MinRcsDeltaV;
+        public double RcsISP;
+        public double RcsDeltaTime;
+        public double RcsThrust;
+        public double RcsMass;
+        public double RcsStartTMR;
+        public double RcsEndTMR;
+        public double RcsUllageTime;
+        public double ControllableMass;
+
+        private List<EngineSignature> _engineSignatures = new List<EngineSignature>();
+        public IReadOnlyList<EngineSignature> EngineSignatures => _engineSignatures;
+
+        public double MaxAccel     => EndMass > 0 ? Thrust / EndMass : 0;
+        public double ResourceMass => StartMass - EndMass;
+
+        public double RcsStartTWR(double geeASL) => RcsStartTMR / (9.80665 * geeASL);
+        public double RcsMaxTWR(double geeASL)   => RcsEndTMR / (9.80665 * geeASL);
+
+        public double StartTWR(double geeASL) => StartMass > 0 ? Thrust / (9.80665 * geeASL * StartMass) : 0;
+
+        public double MaxTWR(double geeASL) => MaxAccel / (9.80665 * geeASL);
+
+        public void AddEngineSignature(EngineSignature engineSignature) => _engineSignatures.Add(engineSignature);
+
+        public void SortEngineSignatures() => _engineSignatures.Sort();
+
+        public override string ToString() =>
+            $"KSP Stage: {KSPStage.ToString()} Thrust: {Thrust.ToString()} Time: {DeltaTime.ToString()} StartMass: {StartMass.ToString()} EndMass: {EndMass.ToString()} DeltaV: {DeltaV.ToString()} ISP: {Isp.ToString()}";
+
+        public FuelStats DeepCopy()
+        {
+            var fuelStats = (FuelStats)MemberwiseClone();
+            fuelStats._engineSignatures = new List<EngineSignature>(_engineSignatures);
+            return fuelStats;
+        }
+    }
+}
